@@ -9,6 +9,12 @@ export interface IMenuItem {
 
 const data: IMenuItem[] = [
   {
+    id: 'first-menu',
+    icon: 'iconsminds-preview',
+    label: 'menu.Actividades',
+    to: ''
+  },
+  {
     id: 'vien',
     icon: 'iconsminds-air-balloon-1',
     label: 'menu.vien',

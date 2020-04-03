@@ -1,8 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { NotificationsService, NotificationType } from 'angular2-notifications';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from 'src/app/shared/auth.service';
+import { error } from "@angular/compiler/src/util";
 
 @Component({
   selector: 'app-reset-password',
@@ -15,10 +16,18 @@ export class ResetPasswordComponent implements OnInit {
 
   buttonDisabled = false;
   buttonState = '';
+  code = '';
 
-  constructor(private authService: AuthService, private notifications: NotificationsService, private router: Router) { }
+  constructor(private authService: AuthService, private notifications: NotificationsService, private router: Router,
+              private activatedRoute: ActivatedRoute) {
+    this.code = this.activatedRoute.snapshot.params.code || null;
+
+  }
 
   ngOnInit() {
+    this.authService.verifyCode(this.code).then().catch(({error}) => {
+      this.router.navigate(['error']);
+    })
   }
 
   onSubmit() {
@@ -27,18 +36,38 @@ export class ResetPasswordComponent implements OnInit {
     }
     this.buttonDisabled = true;
     this.buttonState = 'show-spinner';
-
-    this.authService.resetPassword(this.resetForm.value).subscribe(() => {
-      this.notifications.create('Done', 'Password reset completed, you will be redirected to Login page!', NotificationType.Bare, { theClass: 'outline primary', timeOut: 6000, showProgressBar: true });
+    this.authService.resetPassword({code: this.code, npwd: this.resetForm.value.newPassword}).then(() => {
+      this.notifications.create('Done', 'Password reset completed, you will be redirected to Login page!', NotificationType.Bare, {
+        theClass: 'outline primary',
+        timeOut: 6000,
+        showProgressBar: true
+      });
       this.buttonDisabled = false;
       this.buttonState = '';
       setTimeout(() => {
         this.router.navigate(['user/login']);
       }, 6000);
-    }, (error) => {
+    }).catch(({error}) => {
       this.buttonDisabled = false;
       this.buttonState = '';
-      this.notifications.create('Error', error.message, NotificationType.Bare, { theClass: 'outline primary', timeOut: 6000, showProgressBar: false });
-    });
+      this.notifications.create('Error', error.message, NotificationType.Bare, {
+        theClass: 'outline primary',
+        timeOut: 6000,
+        showProgressBar: false
+      });
+    })
+
+    // this.authService.resetPassword(this.resetForm.value).subscribe(() => {
+    //   this.notifications.create('Done', 'Password reset completed, you will be redirected to Login page!', NotificationType.Bare, { theClass: 'outline primary', timeOut: 6000, showProgressBar: true });
+    //   this.buttonDisabled = false;
+    //   this.buttonState = '';
+    //   setTimeout(() => {
+    //     this.router.navigate(['user/login']);
+    //   }, 6000);
+    // }, (error) => {
+    //   this.buttonDisabled = false;
+    //   this.buttonState = '';
+    //   this.notifications.create('Error', error.message, NotificationType.Bare, { theClass: 'outline primary', timeOut: 6000, showProgressBar: false });
+    // });
   }
 }

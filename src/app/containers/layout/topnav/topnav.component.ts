@@ -62,8 +62,8 @@ export class TopnavComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    if (this.authService.user) {
-      this.displayName = this.authService.user.displayName;
+    if (this.authService.currentUserValue) {
+      this.displayName = this.authService.currentUserValue.name;
     }
     this.subscription = this.sidebarService.getSidebar().subscribe(
       res => {
@@ -80,7 +80,9 @@ export class TopnavComponent implements OnInit, OnDestroy {
   }
 
   menuButtonClick = (e: { stopPropagation: () => void; }, menuClickCount: number, containerClassnames: string) => {
-    if (e) { e.stopPropagation(); }
+    if (e) {
+      e.stopPropagation();
+    }
 
     setTimeout(() => {
       const event = document.createEvent('HTMLEvents');
@@ -96,14 +98,15 @@ export class TopnavComponent implements OnInit, OnDestroy {
   }
 
   mobileMenuButtonClick = (event: { stopPropagation: () => void; }, containerClassnames: string) => {
-    if (event) { event.stopPropagation(); }
+    if (event) {
+      event.stopPropagation();
+    }
     this.sidebarService.clickOnMobileMenu(containerClassnames);
   }
 
   onSignOut() {
-    this.authService.signOut().subscribe(() => {
-      this.router.navigate(['/']);
-    });
+    this.authService.signOut()
+
   }
 
   searchKeyUp(event: KeyboardEvent) {
@@ -111,7 +114,9 @@ export class TopnavComponent implements OnInit, OnDestroy {
       this.search();
     } else if (event.key === 'Escape') {
       const input = document.querySelector('.mobile-view');
-      if (input && input.classList) { input.classList.remove('mobile-view'); }
+      if (input && input.classList) {
+        input.classList.remove('mobile-view');
+      }
       this.searchKey = '';
     }
   }
@@ -119,6 +124,7 @@ export class TopnavComponent implements OnInit, OnDestroy {
   searchAreaClick(event) {
     event.stopPropagation();
   }
+
   searchClick(event) {
     if (window.innerWidth < environment.menuHiddenBreakpoint) {
       let elem = event.target;
@@ -146,7 +152,7 @@ export class TopnavComponent implements OnInit, OnDestroy {
 
   search() {
     if (this.searchKey && this.searchKey.length > 1) {
-      this.router.navigate(['/app/pages/miscellaneous/search'], { queryParams: { key: this.searchKey.toLowerCase().trim() } });
+      this.router.navigate(['/app/pages/miscellaneous/search'], {queryParams: {key: this.searchKey.toLowerCase().trim()}});
       this.searchKey = '';
     }
   }
@@ -154,7 +160,9 @@ export class TopnavComponent implements OnInit, OnDestroy {
   @HostListener('document:click', ['$event'])
   handleDocumentClick(event) {
     const input = document.querySelector('.mobile-view');
-    if (input && input.classList) { input.classList.remove('mobile-view'); }
+    if (input && input.classList) {
+      input.classList.remove('mobile-view');
+    }
     this.searchKey = '';
   }
 }

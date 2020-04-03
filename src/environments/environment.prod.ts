@@ -4,7 +4,8 @@
 
 export const environment = {
   production: true,
-  apiUrl:  'https://api.coloredstrategies.com',
+  apiUrl:  'http://localhost:8081/',
+  //apiUrl:  'https://api.coloredstrategies.com',
   defaultMenuType: 'menu-default',
   subHiddenBreakpoint: 1440,
   menuHiddenBreakpoint: 768,

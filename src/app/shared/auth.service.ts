@@ -6,6 +6,7 @@ import { from } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { map } from 'rxjs/operators';
 import { BehaviorSubject, Observable } from 'rxjs'
+import { Router } from '@angular/router'
 
 const {apiUrl} = environment
 
@@ -21,6 +22,10 @@ export interface ICreateCredentials {
   username: string;
 }
 
+export interface EnvioCorreo {
+  email: string
+}
+
 export interface UserModel {
   id: string;
   email: string;
@@ -31,7 +36,7 @@ export interface UserModel {
 
 export interface IPasswordReset {
   code: string;
-  newPassword: string;
+  npwd: string;
 }
 
 @Injectable({providedIn: 'root'})
@@ -39,7 +44,7 @@ export class AuthService {
   private currentSubject: BehaviorSubject<UserModel>;
   public currentUser: Observable<UserModel>;
 
-  constructor(private afAuth: AngularFireAuth, private http: HttpClient) {
+  constructor(private afAuth: AngularFireAuth, private http: HttpClient, private router: Router) {
     this.currentSubject = new BehaviorSubject<UserModel>(JSON.parse(localStorage.getItem('currentUser')));
     this.currentUser = this.currentSubject.asObservable();
   }
@@ -60,9 +65,9 @@ export class AuthService {
 
 
   signOut() {
-
     localStorage.removeItem('currentUser');
     this.currentSubject.next(null);
+    this.router.navigate(['user/login']);
   }
 
   register(credentials: ICreateCredentials) {
@@ -70,12 +75,20 @@ export class AuthService {
     return this.http.post<any>(`${apiUrl}/user/create`, credentials).toPromise();
   }
 
-  sendPasswordEmail(email) {
-    return from(this.afAuth.auth.sendPasswordResetEmail(email));
+  sendPasswordEmail(correoEnviado) {
+
+    console.log('llega el correo: ', correoEnviado);
+    return this.http.post<any>(`${apiUrl}/user/verifyMail`, {email: correoEnviado}).toPromise();
+    // return from(this.afAuth.auth.sendPasswordResetEmail(email));
   }
 
+  verifyCode(code) {
+    return this.http.post<any>(`${apiUrl}/user/verifyCode`, {code}).toPromise();
+  }
+
+
   resetPassword(credentials: IPasswordReset) {
-    return from(this.afAuth.auth.confirmPasswordReset(credentials.code, credentials.newPassword));
+    return this.http.post<any>(`${apiUrl}/user/returnAction`, credentials).toPromise();
   }
 
   get user(): firebase.User {

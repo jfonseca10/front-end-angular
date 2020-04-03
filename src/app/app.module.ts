@@ -6,7 +6,8 @@ import { ViewsModule } from './views/views.module';
 import { TranslateModule } from '@ngx-translate/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS, HttpClientJsonpModule } from '@angular/common/http';
+import { JwtInterceptor, ErrorInterceptor } from "./helpers";
 import { AngularFireModule } from '@angular/fire';
 import { environment } from '../environments/environment';
 import { LayoutContainersModule } from './containers/layout/layout.containers.module';
@@ -25,7 +26,10 @@ import { LayoutContainersModule } from './containers/layout/layout.containers.mo
   declarations: [
     AppComponent
   ],
-  providers: [],
+  providers: [
+    {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true}
+  ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}
