@@ -1,0 +1,239 @@
+<div class="row">
+  <div class="col-12">
+    <app-heading></app-heading>
+    <app-breadcrumb></app-breadcrumb>
+    <div class="separator mb-2"></div>
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-12">
+    <div class="well well-lg card card-block card-header">
+
+      <div>
+        <tabset #activityTab [justified]="true">
+          <tab heading="Registre sus actividades semanales">
+            <div class="container" style="min-height: 500px">
+              <div class="container-fluid h-100">
+                <div class="row w-100 align-items-center">
+                  <div class="col text-center">
+                    <form #actividadesForm="ngForm" novalidate (ngSubmit)="onSubmit()">
+                      <div class="row">
+                        <div class="col-md-12">
+                          <div class="modal-header">
+                            <h4 class="modal-title pull-left">Agregar Actividad Semanal</h4>
+                          </div>
+                        </div>
+                      </div>
+                      <br>
+                      <div class="row">
+                        <div class="col-xs-10 col-10 col-md-4 form-group">
+                          <input [bsConfig]="{dateInputFormat: 'YYYY-MM-DD'}" class="form-control"
+                                 #drp="bsDaterangepicker" bsDaterangepicker [(ngModel)]="bsRangeValue"
+                                 [ngModelOptions]="{standalone:true}">
+                        </div>
+                        <div class="col-xs-12 col-12 col-md-3 form-group">
+                          <button class="btn btn-info" (click)="drp.toggle()" [attr.aria-expanded]="drp.isOpen"
+                                  type="button">Agregue el rango de semana
+                          </button>
+                        </div>
+                        <div class="col-xs-12 col-12 col-md-3 form-group">
+                          <button type="button" class="btn btn-primary" (click)="agregarSemanal()">Agregar
+                            Actividad Semanal
+                          </button>
+                        </div>
+                      </div>
+                    </form>
+                    <div class="row">
+                      <div class="col-md-12">
+                        <ngx-datatable class="material fullscreen"
+                                       [rows]="actividades"
+                                       [loadingIndicator]="loadingIndicator"
+                                       [columns]="actividadesColumns"
+                                       [headerHeight]="50"
+                                       [footerHeight]="50"
+                                       [reorderable]="reorderable"
+                                       [columnMode]="ColumnMode"
+                                       rowHeight="auto">
+
+
+                          <ngx-datatable-column name="Fecha Inicio Semana" prop="fechaInicio" [width]="300">
+                            <ng-template let-row="row" ngx-datatable-cell-template>
+                              {{renderDateToStr(row.fechaInicio)}}
+                            </ng-template>
+                          </ngx-datatable-column>
+
+                          <ngx-datatable-column name="Fecha Fin Semana" prop="fechaFin" [width]="300">
+                            <ng-template let-row="row" ngx-datatable-cell-template>
+                              {{renderDateToStr(row.fechaFin)}}
+                            </ng-template>
+                          </ngx-datatable-column>
+
+                          <ngx-datatable-column name="Rol Jefatura" prop="rolAutorizador" [width]="300">
+                          </ngx-datatable-column>
+
+                          <ngx-datatable-column name="Editar">
+                            <ng-template let-row="row" ngx-datatable-cell-template>
+                              <button class="btn btn-primary" (click)="handleEdit(row,1)"><i
+                                class="iconsminds-file-edit"></i></button>
+                            </ng-template>
+                          </ngx-datatable-column>
+                          <ngx-datatable-column name="Eliminar">
+                            <ng-template let-row="row" ngx-datatable-cell-template>
+                              <button class="btn btn-primary" (click)="handleDelete(row)"><i
+                                class="iconsminds-file-edit"></i></button>
+                            </ng-template>
+                          </ngx-datatable-column>
+                        </ngx-datatable>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+            </div>
+          </tab>
+          <tab heading="Registre sus actividades diarias">
+            <div class="row">
+              <h1>Semana del {{fechaInicioSemana}} al {{fechaFinSemana}}  </h1>
+            </div>
+
+            <form #actividadesDetalleForm="ngForm" novalidate (ngSubmit)="onSubmit()">
+              <div class="row">
+
+                <div class="col-4">
+                  <div class="mt-4">
+                    <label>Descripcion</label>
+                    <textarea name="descripcion" required ngModel #descripcion="ngModel" class="form-control"
+                              rows="3"></textarea>
+                    <div *ngIf="!descripcion.valid && actividadesForm.submitted" class="invalid-tooltip">Nombre es
+                      requerido!
+                    </div>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="mt-4">
+                    <label>Referencia</label>
+                    <textarea class="form-control" rows="3" ngModel #referencia="ngModel"
+                              name="referencia"></textarea>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="mt-4">
+                    <label>Producto Entregable</label>
+                    <textarea class="form-control" rows="3" ngModel #productoEntregable="ngModel"
+                              name="productoEntregable"></textarea>
+
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="mt-4">
+                    <label>Observacion</label>
+                    <textarea class="form-control" rows="3" ngModel #observacion="ngModel"
+                              name="observacion"></textarea>
+                  </div>
+                </div>
+                <div class="col-2">
+                  <div class="mt-4">
+                    <label>Fecha Hora Inicio</label>
+                    <input class="form-control" type="datetime-local" ngModel #fechaInicio="ngModel"
+                           name="fechaInicio"/>
+                  </div>
+                </div>
+                <div class="col-2">
+                  <div class="mt-4">
+                    <label>Fecha Hora Fin</label>
+                    <input class="form-control" type="datetime-local" ngModel #fechaFin="ngModel" name="fechaFin"/>
+                  </div>
+                </div>
+                <div class="col-2">
+                  <div class="mt-4">
+                    <label>Porcentaje/Avance%</label>
+                    <ng-select [items]="porcentajesAvances" [hideSelected]="true" bindLabel="regionName" ngModel
+                               #porcentajeAvance="ngModel"
+                               name="porcentajeAvance">
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-primary"
+                            (click)="cancelar()">Cancelar
+                    </button>
+                    <button type="button" (click)="agregarDetalleActividad()" class="btn btn-primary float-right">
+                      {{buttonLabel}}
+                    </button>
+
+                  </div>
+                </div>
+              </div>
+            </form>
+            <div class="row">
+              <input
+                type="text"
+                style="padding:8px;margin:15px auto;width:30%;"
+                placeholder="Type to filter the name column..."
+                (keyup)="updateFilter($event)"
+              />
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <ngx-datatable
+                  #activityTable
+                  class="material fullscreen"
+                  [rows]="detalleActividades"
+                  [loadingIndicator]="loadingIndicator"
+                  [columns]="detalleActividadesColumns"
+                  [headerHeight]="50"
+                  [footerHeight]="50"
+                  [reorderable]="reorderable"
+                  [columnMode]="ColumnMode"
+                  rowHeight="auto">
+
+                  <ngx-datatable-column name="Descripción" prop="descripcionActividad"
+                                        [width]="200"></ngx-datatable-column>
+                  <ngx-datatable-column name="Desde" prop="desdeDiaSemana" [width]="155">
+                    <ng-template let-row="row" ngx-datatable-cell-template>
+                      {{renderDateToStrHours(row.desdeDiaSemana)}}
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="Hasta" prop="hastaDiaSemana" [width]="155">
+                    <ng-template let-row="row" ngx-datatable-cell-template>
+                      {{renderDateToStrHours(row.hastaDiaSemana)}}
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="Producto Digital" prop="productoDigitalEntregable"
+                                        [width]="170"></ngx-datatable-column>
+                  <ngx-datatable-column name="Referencia" prop="referenciaActividad"
+                                        [width]="100"></ngx-datatable-column>
+                  <ngx-datatable-column name="Observaciones" prop="observacionActividad"
+                                        [width]="190"></ngx-datatable-column>
+                  <ngx-datatable-column name="Avance %" prop="avancePorcentaje" [width]="80"></ngx-datatable-column>
+
+                  <ngx-datatable-column name="Editar" [width]="80">
+                    <ng-template let-row="row" ngx-datatable-cell-template>
+                      <button class="btn btn-primary" (click)="detailEdit(row)"><i
+                        class="iconsminds-file-edit"></i></button>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="Eliminar" [width]="80">
+                    <ng-template let-row="row" ngx-datatable-cell-template>
+                      <button class="btn btn-primary" (click)="handleDelete(row)"><i
+                        class="iconsminds-file-edit"></i></button>
+                    </ng-template>
+                  </ngx-datatable-column>
+                </ngx-datatable>
+              </div>
+            </div>
+
+          </tab>
+        </tabset>
+      </div>
+    </div>
+  </div>
+</div>
+
+<simple-notifications></simple-notifications>
+

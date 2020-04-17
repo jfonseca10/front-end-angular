@@ -1,0 +1,111 @@
+<div class="row">
+  <div class="col-12">
+    <app-heading></app-heading>
+    <app-breadcrumb></app-breadcrumb>
+    <div class="separator mb-2"></div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-12">
+    <div class="well well-lg card card-block card-header">
+
+      <div>
+        <tabset [justified]="true">
+          <tab heading="Registre su Ingreso y Salida" id="tab1">
+            <div class="container" style="min-height: 500px">
+              <div class="row">
+                <br>
+              </div>
+              <div class="row">
+                <h1>Bienvenido al sistema de registro de asistencias..!</h1>
+              </div>
+              <div class="row">
+                <br>
+              </div>
+              <div class="row">
+                <br>
+              </div>
+              <div class="row">
+                <br>
+              </div>
+              <div class="row">
+                <br>
+              </div>
+              <div class="row">
+                <br>
+              </div>
+              <div class="container-fluid h-100">
+                <div class="row w-100 align-items-center">
+                  <div class="col text-center">
+                    <button class="btn-lg btn-primary" [disabled]="btnIniciar" (click)="inicialJornada()"> Iniciar
+                      Jornada Laboral
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="container-fluid h-100">
+                <div class="row w-100 align-items-center">
+                  <br>
+                </div>
+              </div>
+
+              <div class="container-fluid h-100">
+                <div class="row w-100 align-items-center">
+                  <div class="col text-center">
+                    <button class="btn-lg btn-danger" [disabled]="btnSalida" (click)="finalizarJornada()"> Finalizar
+                      Jornada
+                      Laboral
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </tab>
+
+          <tab heading="Registros Mensuales Asistencia">
+            <h1>Busqueda de asistencias</h1>
+            <div class="card border-info">
+              <div class="card-header bg-info" style="text-align: center">
+                <h4 class="mb-0 text-white"><i class="mdi mdi-filter-outline"></i>Filtros</h4>
+              </div>
+
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-md-3">
+                    <label class="form-group has-float-label">
+                      <input class="form-control" required type="datetime-local" [(ngModel)]="fechaInicio" name="fechaInicio"/>
+                      <span>Fecha Inicio</span>
+                    </label>
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-group has-float-label">
+                      <input class="form-control" required type="datetime-local" [(ngModel)]="fechaFin" name="fechaFin"/>
+                      <span>Fecha Fin</span>
+                    </label>
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-group has-float-label">
+                      <button type="button" class="btn btn-info btn-shadow" (click)="btnConsultarAsistencias()">Consultar</button>
+                    </label>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-12">
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </tab>
+
+        </tabset>
+      </div>
+    </div>
+  </div>
+</div>
+
+<simple-notifications></simple-notifications>

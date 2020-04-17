@@ -3,6 +3,6 @@
         <li class="breadcrumb-item" *ngFor="let sub of pathArr; let i=index" [hidden]="i >= (pathArr.length-1)">
             <a [routerLink]="[getUrl(sub)]">{{'menu.'+sub | translate}}</a>
         </li>
-        <li class="breadcrumb-item active" aria-current="page">{{ 'menu.'+currentRoute | translate }}</li>
+        <li class="breadcrumb-item active" aria-current="page">{{ currentRoute | translate }}</li>
     </ol>
 </nav>

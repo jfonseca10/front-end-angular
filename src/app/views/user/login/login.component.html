@@ -16,15 +16,15 @@
 
     <form #loginForm="ngForm" novalidate (ngSubmit)="onSubmit()">
       <label class="form-group has-float-label">
-        <input class="form-control" required type="text" ngModel #username="ngModel" name="username"/>
-        <span>Usuario</span>
-        <div *ngIf="!username.valid && loginForm.submitted" class="invalid-tooltip">Email is required!</div>
+        <input class="form-control" required type="text" ngModel #rol="ngModel" name="rol"/>
+        <span>Rol</span>
+        <div *ngIf="!rol.valid && loginForm.submitted" class="invalid-tooltip">El rol es requerido..!</div>
       </label>
       <label class="form-group has-float-label">
         <input class="form-control" type="password" placeholder="" required ngModel #password="ngModel"
                name="password"/>
         <span>{{ 'user.password' | translate }}</span>
-        <div *ngIf="!password.valid && loginForm.submitted" class="invalid-tooltip">Password is required!</div>
+        <div *ngIf="!password.valid && loginForm.submitted" class="invalid-tooltip">Password es requerido..!</div>
       </label>
       <div class="d-flex justify-content-between align-items-center">
         <a routerLink="/user/forgot-password">{{ 'user.forgot-password' | translate }}?</a>

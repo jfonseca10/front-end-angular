@@ -10,8 +10,9 @@ import { NgForm } from '@angular/forms';
 })
 export class RegisterComponent implements OnInit {
   @ViewChild('registerForm') registerForm: NgForm;
-  buttonDisabled = false;
+  buttonDisabled = true;
   buttonState = '';
+  passDisable: boolean = true;
 
   constructor(private authService: AuthService, private notifications: NotificationsService, private router: Router) {
   }
@@ -30,20 +31,37 @@ export class RegisterComponent implements OnInit {
     }).catch(({error}) => {
       this.buttonDisabled = false;
       this.buttonState = '';
-      console.log(error)
       this.notifications.create('Error', error.message, NotificationType.Bare, {
         theClass: 'outline primary',
         timeOut: 6000,
         showProgressBar: false
       });
     });
+  }
 
-    // this.authService.register(this.registerForm.value).subscribe(() => {
-    //   this.router.navigate(['/']);
-    // }, (error) => {
-    //   this.notifications.create('Error', error.message, NotificationType.Bare, { theClass: 'outline primary', timeOut: 6000, showProgressBar: false });
-    //   this.buttonDisabled = false;
-    //   this.buttonState = '';
-    // });
+  consultarUsuario() {
+    const {rol} = this.registerForm.value;
+    if (rol) {
+      this.authService.getDatosEmpleado(rol).then(result => {
+        if (result) {
+          console.log('result',result)
+          this.registerForm.setValue({
+            rol, name: result.NOMB_EMPL, email: result.E_MAIL, password: null
+          });
+          this.passDisable = false;
+          this.buttonDisabled = false;
+        } else {
+
+        }
+      }).catch(({error}) => {
+        this.buttonDisabled = false;
+        this.buttonState = '';
+        this.notifications.create('Error', error.message, NotificationType.Bare, {
+          theClass: 'outline primary',
+          timeOut: 6000,
+          showProgressBar: false
+        });
+      });
+    }
   }
 }

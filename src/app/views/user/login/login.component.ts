@@ -30,12 +30,12 @@ export class LoginComponent implements OnInit {
     this.buttonState = 'show-spinner';
 
     this.authService.signIn(this.loginForm.value).pipe(first()).subscribe(() => {
-      this.router.navigate(['/']);
-    }, error => {
+      this.router.navigate(['/app/registro-asistencia']);
+    }, ({error}) => {
       console.log(error);
       this.buttonDisabled = false;
       this.buttonState = '';
-      this.notifications.create('Error', 'no data', NotificationType.Bare, {
+      this.notifications.create('Error', error, NotificationType.Bare, {
         theClass: 'outline primary',
         timeOut: 6000,
         showProgressBar: false

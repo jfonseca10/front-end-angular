@@ -5,60 +5,48 @@ import { Router } from '@angular/router';
 import { AuthService } from 'src/app/shared/auth.service';
 
 @Component({
-    selector: 'app-forgot-password',
-    templateUrl: './forgot-password.component.html',
+  selector: 'app-forgot-password',
+  templateUrl: './forgot-password.component.html',
 })
 export class ForgotPasswordComponent implements OnInit {
-    @ViewChild('passwordForm') passwordForm: NgForm;
-    buttonDisabled = false;
-    buttonState = '';
+  @ViewChild('passwordForm') passwordForm: NgForm;
+  buttonDisabled = false;
+  buttonState = '';
 
-    constructor(private authService: AuthService, private notifications: NotificationsService, private router: Router) {
+  constructor(private authService: AuthService, private notifications: NotificationsService, private router: Router) {
+  }
+
+  ngOnInit() {
+  }
+
+  onSubmit() {
+    console.log('valid: ', this.passwordForm.value.email);
+    if (!this.passwordForm.valid || this.buttonDisabled) {
+      return;
     }
+    this.buttonDisabled = true;
+    this.buttonState = 'show-spinner';
 
-    ngOnInit() {
-    }
+    this.authService.sendPasswordEmail(this.passwordForm.value.email).then(result => {
+      this.notifications.create('Clave enviada', 'El link para reseteo de clave ha sido enviada al correo institucional', NotificationType.Success, {
+        theClass: 'outline primary',
+        timeOut: 4000,
+        showProgressBar: true
+      });
+      setTimeout(() => {
+        this.router.navigate(['/']);
+      }, 6000);
 
-    onSubmit() {
-        console.log('valid: ', this.passwordForm.value.email);
-        if (!this.passwordForm.valid || this.buttonDisabled) {
-            return;
-        }
-        this.buttonDisabled = true;
-        this.buttonState = 'show-spinner';
+    }).catch(({error}) => {
+      this.buttonDisabled = false;
+      this.buttonState = '';
+      this.notifications.create('Error', error.message, NotificationType.Bare, {
+        theClass: 'outline primary',
+        timeOut: 6000,
+        showProgressBar: false
+      });
 
-        this.authService.sendPasswordEmail(this.passwordForm.value.email).then(console.log).catch(({error}) => {
-            this.buttonDisabled = false;
-            this.buttonState = '';
-            this.notifications.create('Error', error.message, NotificationType.Bare, {
-                theClass: 'outline primary',
-                timeOut: 6000,
-                showProgressBar: false
-            });
-
-        })
-
-        // this.authService.sendPasswordEmail(this.passwordForm.value.email).subscribe((answer) => {
-        // }, (error) => {
-        //     this.notifications.create('Error', error.message, NotificationType.Bare, {
-        //         theClass: 'outline primary',
-        //         timeOut: 6000,
-        //         showProgressBar: false
-        //     });
-        //     this.buttonDisabled = false;
-        //     this.buttonState = '';
-        // }, () => {
-        //     this.notifications.create('Done', 'Password reset email is sent, you will be redirected to Reset Password page!', NotificationType.Bare, {
-        //         theClass: 'outline primary',
-        //         timeOut: 6000,
-        //         showProgressBar: true
-        //     });
-        //     this.buttonDisabled = false;
-        //     this.buttonState = '';
-        //     setTimeout(() => {
-        //         this.router.navigate(['user/reset-password']);
-        //     }, 6000);
-        // });
-    }
+    })
+  }
 
 }

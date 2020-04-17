@@ -14,32 +14,37 @@
     <h6 class="mb-4">Registro de usuarios</h6>
 
     <form #registerForm="ngForm" novalidate (ngSubmit)="onSubmit()">
+
       <label class="form-group has-float-label">
-        <input class="form-control" required ngModel #name="ngModel" name="name"/>
+        <input class="form-control" required ngModel #rol="ngModel" name="rol"/>
+        <span>Rol de usuario</span>
+        <div *ngIf="!rol.valid && registerForm.touched" class="invalid-tooltip">Rol es requerido!</div>
+      </label>
+      <label class="form-group has-float-label">
+        <input class="form-control" required ngModel #name="ngModel" name="name" readonly="true"/>
         <span>Nombre Completo</span>
-        <div *ngIf="!name.valid && registerForm.submitted" class="invalid-tooltip">Nombre es requerido!</div>
+        <!--        <div *ngIf="!name.valid && registerForm.submitted" class="invalid-tooltip">Nombre es requerido!</div>-->
       </label>
+
       <label class="form-group has-float-label">
-        <input class="form-control" required ngModel #username="ngModel" name="username"/>
-        <span>Nombre de usuario</span>
-        <div *ngIf="!name.valid && registerForm.submitted" class="invalid-tooltip">Usuario es requerido!</div>
-      </label>
-      <label class="form-group has-float-label">
-        <input class="form-control" required email ngModel #email="ngModel" name="email"/>
+        <input class="form-control" required email ngModel #email="ngModel" name="email" readonly="true"/>
         <span>{{ 'user.email' | translate }}</span>
-        <div *ngIf="!email.valid && registerForm.submitted" class="invalid-tooltip">Email es requerido!</div>
-        <div *ngIf="email?.errors?.email && registerForm.submitted" class="invalid-tooltip">Email debe ser una dirección
-          valida!
-        </div>
+        <!--        <div *ngIf="!email.valid && registerForm.submitted" class="invalid-tooltip">Email es requerido!</div>-->
+        <!--        <div *ngIf="email?.errors?.email && registerForm.submitted" class="invalid-tooltip">Email debe ser una dirección-->
+        <!--          valida!-->
+        <!--        </div>-->
       </label>
       <label class="form-group has-float-label">
         <input class="form-control" type="password" placeholder="" required ngModel #password="ngModel"
-               name="password"/>
+               name="password" [disabled]="passDisable"/>
         <span>{{ 'user.password' | translate }}</span>
-        <div *ngIf="!password.valid && registerForm.submitted" class="invalid-tooltip">Password es requerido!</div>
+        <!--        <div *ngIf="!password.valid && registerForm.submitted" class="invalid-tooltip">Password es requerido!</div>-->
       </label>
       <div class="d-flex justify-content-between align-items-center">
         <a routerLink="/user/forgot-password">Olvidaste el Password?</a>
+
+        <button type="button" class="btn btn-primary btn-lg btn-shadow" (click)="consultarUsuario()">Consultar Usuario
+        </button>
         <app-state-button [btnClass]="'btn btn-primary btn-lg btn-shadow'" [currentState]="buttonState"
                           [isDisabled]="buttonDisabled" click="onLoginClick()">
           Registrar

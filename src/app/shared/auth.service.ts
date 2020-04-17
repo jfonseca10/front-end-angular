@@ -11,7 +11,7 @@ import { Router } from '@angular/router'
 const {apiUrl} = environment
 
 export interface ISignInCredentials {
-  email: string;
+  rol: string;
   password: string;
 }
 
@@ -19,7 +19,7 @@ export interface ICreateCredentials {
   email: string;
   password: string;
   name: string;
-  username: string;
+  rol: string;
 }
 
 export interface EnvioCorreo {
@@ -30,7 +30,7 @@ export interface UserModel {
   id: string;
   email: string;
   name: string;
-  username: string;
+  rol: string;
   token: string;
 }
 
@@ -76,7 +76,6 @@ export class AuthService {
   }
 
   sendPasswordEmail(correoEnviado) {
-
     console.log('llega el correo: ', correoEnviado);
     return this.http.post<any>(`${apiUrl}/user/verifyMail`, {email: correoEnviado}).toPromise();
     // return from(this.afAuth.auth.sendPasswordResetEmail(email));
@@ -93,6 +92,12 @@ export class AuthService {
 
   get user(): firebase.User {
     return this.afAuth.auth.currentUser;
+  }
+
+  getDatosEmpleado(rol)
+  {
+    console.log('ingreso a servcio', rol)
+    return this.http.get<any>(`${apiUrl}/user/getDatoEmpleado`,{params: {rol}}).toPromise();
   }
 
 }

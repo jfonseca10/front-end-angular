@@ -1,3 +1,5 @@
+import { app } from "firebase";
+
 export interface IMenuItem {
   id?: string;
   icon?: string;
@@ -8,11 +10,29 @@ export interface IMenuItem {
 }
 
 const data: IMenuItem[] = [
+
   {
     id: 'first-menu',
+    icon: 'iconsminds-clock',
+    label: 'Registro Asistencia',
+    to: '/app/registro-asistencia'
+  },
+  {
+    id: 'second-menu',
     icon: 'iconsminds-preview',
-    label: 'menu.Actividades',
-    to: ''
+    label: 'Actividades',
+    to: '/app/actividades'
+  },
+  {
+    id: 'location',
+    icon: 'iconsminds-preview',
+    label: 'location',
+    to: '/app/location',
+    subs: [{
+      icon: 'simple-icon-paper-plane',
+      label: 'countries',
+      to: '/app/location/countries'
+    }]
   },
   {
     id: 'vien',
