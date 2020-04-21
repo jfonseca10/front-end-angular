@@ -13,13 +13,13 @@ export interface ICreateActividad {
 
 export interface ICreateDetalleActividad {
   actividadId: string;
-  descripcion: string;
+  descripcionActividad: string;
   fechaFin: string;
   fechaInicio: string;
-  observacion: string;
-  productoEntregable: string;
-  porcentajeAvance: string;
-  referencia: string;
+  observacionActividad: string;
+  productoDigitalEntregable: string;
+  avancePorcentaje: string;
+  referenciaActividad: string;
 }
 
 @Injectable()
@@ -48,6 +48,10 @@ export class ActividadesService {
 
   updateDetalleActividad(id, newObjeto) {
     return this.http.post<any>(`${apiUrl}/actividades/updateDetalleActividad/${id}`, newObjeto).toPromise();
+  }
+
+  deleteDetalleActividad(detalleId) {
+    return this.http.post<any>(`${apiUrl}/actividades/deleteDetalleActividad`, {detalleId}).toPromise();
   }
 
 

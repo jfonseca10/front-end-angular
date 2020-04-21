@@ -106,9 +106,9 @@
                 <div class="col-4">
                   <div class="mt-4">
                     <label>Descripcion</label>
-                    <textarea name="descripcion" required ngModel #descripcion="ngModel" class="form-control"
+                    <textarea name="descripcionActividad" required ngModel #descripcionActividad="ngModel" class="form-control"
                               rows="3"></textarea>
-                    <div *ngIf="!descripcion.valid && actividadesForm.submitted" class="invalid-tooltip">Nombre es
+                    <div *ngIf="!descripcionActividad.valid && actividadesForm.submitted" class="invalid-tooltip">Nombre es
                       requerido!
                     </div>
                   </div>
@@ -116,23 +116,23 @@
                 <div class="col-4">
                   <div class="mt-4">
                     <label>Referencia</label>
-                    <textarea class="form-control" rows="3" ngModel #referencia="ngModel"
-                              name="referencia"></textarea>
+                    <textarea class="form-control" rows="3" ngModel #referenciaActividad="ngModel"
+                              name="referenciaActividad"></textarea>
                   </div>
                 </div>
                 <div class="col-4">
                   <div class="mt-4">
                     <label>Producto Entregable</label>
-                    <textarea class="form-control" rows="3" ngModel #productoEntregable="ngModel"
-                              name="productoEntregable"></textarea>
+                    <textarea class="form-control" rows="3" ngModel #productoDigitalEntregable="ngModel"
+                              name="productoDigitalEntregable"></textarea>
 
                   </div>
                 </div>
                 <div class="col-6">
                   <div class="mt-4">
                     <label>Observacion</label>
-                    <textarea class="form-control" rows="3" ngModel #observacion="ngModel"
-                              name="observacion"></textarea>
+                    <textarea class="form-control" rows="3" ngModel #observacionActividad="ngModel"
+                              name="observacionActividad"></textarea>
                   </div>
                 </div>
                 <div class="col-2">
@@ -152,8 +152,8 @@
                   <div class="mt-4">
                     <label>Porcentaje/Avance%</label>
                     <ng-select [items]="porcentajesAvances" [hideSelected]="true" bindLabel="regionName" ngModel
-                               #porcentajeAvance="ngModel"
-                               name="porcentajeAvance">
+                               #avancePorcentaje="ngModel"
+                               name="avancePorcentaje">
                     </ng-select>
                   </div>
                 </div>
@@ -174,7 +174,7 @@
               <input
                 type="text"
                 style="padding:8px;margin:15px auto;width:30%;"
-                placeholder="Type to filter the name column..."
+                placeholder="Busqueda avanzada..."
                 (keyup)="updateFilter($event)"
               />
             </div>
@@ -192,8 +192,9 @@
                   [columnMode]="ColumnMode"
                   rowHeight="auto">
 
-                  <ngx-datatable-column name="Descripción" prop="descripcionActividad"
-                                        [width]="200"></ngx-datatable-column>
+                  <ngx-datatable-column name="Descripcion" prop="descripcionActividad" [width]="200">
+                  </ngx-datatable-column>
+
                   <ngx-datatable-column name="Desde" prop="desdeDiaSemana" [width]="155">
                     <ng-template let-row="row" ngx-datatable-cell-template>
                       {{renderDateToStrHours(row.desdeDiaSemana)}}
@@ -220,8 +221,19 @@
                   </ngx-datatable-column>
                   <ngx-datatable-column name="Eliminar" [width]="80">
                     <ng-template let-row="row" ngx-datatable-cell-template>
-                      <button class="btn btn-primary" (click)="handleDelete(row)"><i
-                        class="iconsminds-file-edit"></i></button>
+
+                      <button type="button" class="btn btn-danger" (click)="openModal(template)">
+                        <i class="iconsminds-delete-file"></i>
+                      </button>
+                      <br><br>
+                      <ng-template #template>
+                        <div class="modal-body text-center">
+                          <p>Do you want to confirm?</p>
+                          <button type="button" class="btn btn-default" (click)="confirm(row)" >Yes</button>
+                          <button type="button" class="btn btn-primary" (click)="decline()" >No</button>
+                        </div>
+                      </ng-template>
+
                     </ng-template>
                   </ngx-datatable-column>
                 </ngx-datatable>
@@ -236,4 +248,3 @@
 </div>
 
 <simple-notifications></simple-notifications>
-

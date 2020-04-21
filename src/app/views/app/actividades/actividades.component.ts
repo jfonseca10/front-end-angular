@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { ColumnMode, DatatableComponent } from "@swimlane/ngx-datatable";
 import { ActividadesService } from "../../../shared/actividades.service";
 import { NgForm } from "@angular/forms";
@@ -8,6 +8,7 @@ import { CommonModule, DatePipe } from "@angular/common";
 import { AuthService } from "../../../shared/auth.service";
 import { TabsetComponent } from "ngx-bootstrap";
 import * as moment from 'moment';
+import { BsModalService, BsModalRef } from "ngx-bootstrap/modal";
 
 @Component({
   selector: 'app-actividades',
@@ -16,6 +17,9 @@ import * as moment from 'moment';
 })
 
 export class ActividadesComponent implements OnInit {
+  modalRef: BsModalRef;
+  message: string;
+
   bsValue = new Date();
   bsRangeValue: Date[];
   maxDate = new Date();
@@ -36,7 +40,6 @@ export class ActividadesComponent implements OnInit {
       prop: 'rolAutorizador'
     }
   ];
-
   detalleActividadesColumns = [
     {
       name: 'Descripción',
@@ -81,10 +84,41 @@ export class ActividadesComponent implements OnInit {
   fechaFinSemana: any;
   valorDetalle: any;
   buttonLabel = 'Agregar';
+  private descripcionActividad: any;
 
-  constructor(private actividadesService: ActividadesService, private datePipe: DatePipe, private notifications: NotificationsService, private commonModule: CommonModule, private authService: AuthService) {
+  constructor(private modalService: BsModalService, private actividadesService: ActividadesService, private datePipe: DatePipe, private notifications: NotificationsService, private commonModule: CommonModule, private authService: AuthService) {
     this.maxDate.setDate(this.maxDate.getDate() + 7);
     this.bsRangeValue = [this.bsValue, this.maxDate];
+  }
+
+  openModal(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(template, {class: 'modal-sm'});
+  }
+
+  confirm(row): void {
+    const {detalleId, actividadId} = row
+    this.message = 'Confirmed!';
+    console.log('eliminar', detalleId)
+    this.actividadesService.deleteDetalleActividad(detalleId).then(result => {
+      console.log('rre', result)
+      this.actividadesService.getActividadesDetalle(actividadId).then(result => {
+        this.detalleActividadesTmp = result
+        this.detalleActividades = result
+        this.actividadesDetalleForm.resetForm();
+      });
+
+      this.notifications.create('Actividad Agregada', 'Se agrego correctamente', NotificationType.Success, {
+        theClass: 'outline primary',
+        timeOut: 3000,
+        showProgressBar: true
+      })
+    });
+    this.modalRef.hide();
+  }
+
+  decline(): void {
+    this.message = 'Declined!';
+    this.modalRef.hide();
   }
 
   renderDateToStr(date) {
@@ -92,7 +126,7 @@ export class ActividadesComponent implements OnInit {
   }
 
   renderDateToStrHours(date) {
-    return moment(date).utc().format('YYYY-MM-DD HH:mm')
+    return moment(date).utc().subtract(5, 'hours').format('YYYY-MM-DD HH:mm')
   }
 
   ngOnInit() {
@@ -138,12 +172,15 @@ export class ActividadesComponent implements OnInit {
 
   handleEdit(value, tabId: number) {
     this.activityTab.tabs[tabId].active = true;
-    const {actividadId, fechaInicio, fechaFin} = value
+    const {actividadId, descripcionActividad, fechaInicio, fechaFin} = value
     this.fechaInicioSemana = this.datePipe.transform(fechaInicio, 'yyyy/MM/dd')
     this.fechaFinSemana = this.datePipe.transform(fechaFin, 'yyyy/MM/dd')
+    this.descripcionActividad = descripcionActividad
 
     this.valorDetalle = actividadId
+
     this.actividadesService.getActividadesDetalle(actividadId).then(result => {
+      console.log('ss', result)
       this.detalleActividades = result
       this.detalleActividadesTmp = result
 
@@ -188,13 +225,13 @@ export class ActividadesComponent implements OnInit {
     this.buttonLabel = 'Actualizar';
     this.detalilSelected = data;
     this.actividadesDetalleForm.setValue({
-      descripcion: data.descripcionActividad || null,
-      observacion: data.observacionActividad || null,
-      referencia: data.referenciaActividad || null,
-      productoEntregable: data.productoDigitalEntregable || null,
+      descripcionActividad: data.descripcionActividad || null,
+      observacionActividad: data.observacionActividad || null,
+      referenciaActividad: data.referenciaActividad || null,
+      productoDigitalEntregable: data.productoDigitalEntregable || null,
       fechaInicio: data.desdeDiaSemana ? moment(data.desdeDiaSemana).utc().format('YYYY-MM-DDTHH:mm:ss') : null,
       fechaFin: data.hastaDiaSemana ? moment(data.hastaDiaSemana).utc().format('YYYY-MM-DDTHH:mm:ss') : null,
-      porcentajeAvance: data.avancePorcentaje || null,
+      avancePorcentaje: data.avancePorcentaje || null,
     })
   }
 
@@ -229,21 +266,24 @@ export class ActividadesComponent implements OnInit {
       return;
     }
     const {
-      descripcion, fechaFin, fechaInicio, observacion, porcentajeAvance,
-      productoEntregable, referencia
+      descripcionActividad, fechaFin, fechaInicio, observacionActividad, avancePorcentaje,
+      productoDigitalEntregable, referenciaActividad
     } = this.actividadesDetalleForm.value
+
+    console.log('frontjjj', this.actividadesDetalleForm.value)
     const objeto = {
       actividadId,
-      descripcion,
+      descripcionActividad,
       fechaFin,
       fechaInicio,
-      observacion,
-      porcentajeAvance,
-      productoEntregable,
-      referencia
+      observacionActividad,
+      avancePorcentaje,
+      productoDigitalEntregable,
+      referenciaActividad
     };
     if (!this.detalilSelected) {
       this.actividadesService.createDetalleActividad(objeto).then(result => {
+        console.log('eee', objeto)
         this.actividadesService.getActividadesDetalle(actividadId).then(result => {
           this.detalleActividadesTmp = result
           this.detalleActividades = result
@@ -257,30 +297,19 @@ export class ActividadesComponent implements OnInit {
         })
       })
     } else {
-      console.log('send to edit', this.detalilSelected)
-      const {
-        detalleId, actividadId, desdeDiaSemana, hastaDiaSemana,
-        descripcionActividad, productoDigitalEntregable, avancePorcentaje,
-        aprobacionJefatura, observacionActividad, referenciaActividad,
-        fechaAprobacion
-      } = this.detalilSelected
-      const objetoCompleto = this.detalilSelected
-
-      const id = detalleId
-      const newObjeto = {
-        actividadId, desdeDiaSemana, hastaDiaSemana,
-        descripcionActividad, productoDigitalEntregable, avancePorcentaje,
-        aprobacionJefatura, observacionActividad, referenciaActividad,
-        fechaAprobacion
-      }
-
-      this.actividadesService.updateDetalleActividad(id, objetoCompleto).then(result => {
+      const {detalleId} = this.detalilSelected
+      this.actividadesService.updateDetalleActividad(detalleId, this.actividadesDetalleForm.value).then(result => {
         this.actividadesService.getActividadesDetalle(actividadId).then(result => {
           this.detalleActividades = result
           this.actividadesDetalleForm.resetForm();
         });
         this.detalilSelected = null;
         this.buttonLabel = 'Agregar';
+      });
+      this.notifications.create('Actividad Modificada', 'Se modifico correctamente', NotificationType.Info, {
+        theClass: 'outline primary',
+        timeOut: 3000,
+        showProgressBar: true
       })
     }
 

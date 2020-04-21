@@ -8,10 +8,9 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { FormsModule } from '@angular/forms';
 import { TabsModule } from "ngx-bootstrap";
 import { SimpleNotificationsModule } from "angular2-notifications";
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { CommonModule } from "@angular/common";
-import { AppRoutingModule } from "../app.routing";
+import { ModalModule } from "ngx-bootstrap/modal";
 
 
 @NgModule({
@@ -22,7 +21,8 @@ import { AppRoutingModule } from "../app.routing";
     SimpleNotificationsModule.forRoot(),
     FormsModule,
     BsDatepickerModule.forRoot(),
-    CommonModule],
+    CommonModule,
+    ModalModule.forRoot()],
   exports: [],
   declarations: [ActividadesComponent, CreateActividadesComponent],
   providers: []
