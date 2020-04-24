@@ -137,15 +137,9 @@
                 </div>
                 <div class="col-2">
                   <div class="mt-4">
-                    <label>Fecha Hora Inicio</label>
-                    <input class="form-control" type="datetime-local" ngModel #fechaInicio="ngModel"
+                    <label>Fecha Actividad</label>
+                    <input class="form-control" type="date" ngModel #fechaInicio="ngModel"
                            name="fechaInicio"/>
-                  </div>
-                </div>
-                <div class="col-2">
-                  <div class="mt-4">
-                    <label>Fecha Hora Fin</label>
-                    <input class="form-control" type="datetime-local" ngModel #fechaFin="ngModel" name="fechaFin"/>
                   </div>
                 </div>
                 <div class="col-2">
@@ -180,9 +174,9 @@
             </div>
             <div class="row">
               <div class="col-md-12">
-                <ngx-datatable
+                <ngx-datatable style="align-items: center !important;"
                   #activityTable
-                  class="material fullscreen"
+                  class="material fullscreen expandable"
                   [rows]="detalleActividades"
                   [loadingIndicator]="loadingIndicator"
                   [columns]="detalleActividadesColumns"
@@ -190,27 +184,25 @@
                   [footerHeight]="50"
                   [reorderable]="reorderable"
                   [columnMode]="ColumnMode"
+                  [limit]="5"
+                  [summaryPosition]="'bottom'"
+                  [scrollbarH]="true"
                   rowHeight="auto">
 
-                  <ngx-datatable-column name="Descripcion" prop="descripcionActividad" [width]="200">
+                  <ngx-datatable-column name="Descripcion" prop="descripcionActividad" [width]="240">
                   </ngx-datatable-column>
 
-                  <ngx-datatable-column name="Desde" prop="desdeDiaSemana" [width]="155">
+                  <ngx-datatable-column name="Fecha Actividad" prop="diaSemana" [width]="155">
                     <ng-template let-row="row" ngx-datatable-cell-template>
-                      {{renderDateToStrHours(row.desdeDiaSemana)}}
-                    </ng-template>
-                  </ngx-datatable-column>
-                  <ngx-datatable-column name="Hasta" prop="hastaDiaSemana" [width]="155">
-                    <ng-template let-row="row" ngx-datatable-cell-template>
-                      {{renderDateToStrHours(row.hastaDiaSemana)}}
+                      {{renderDateToStr(row.diaSemana)}}
                     </ng-template>
                   </ngx-datatable-column>
                   <ngx-datatable-column name="Producto Digital" prop="productoDigitalEntregable"
-                                        [width]="170"></ngx-datatable-column>
+                                        [width]="240"></ngx-datatable-column>
                   <ngx-datatable-column name="Referencia" prop="referenciaActividad"
                                         [width]="100"></ngx-datatable-column>
                   <ngx-datatable-column name="Observaciones" prop="observacionActividad"
-                                        [width]="190"></ngx-datatable-column>
+                                        [width]="240"></ngx-datatable-column>
                   <ngx-datatable-column name="Avance %" prop="avancePorcentaje" [width]="80"></ngx-datatable-column>
 
                   <ngx-datatable-column name="Editar" [width]="80">
@@ -219,6 +211,7 @@
                         class="iconsminds-file-edit"></i></button>
                     </ng-template>
                   </ngx-datatable-column>
+
                   <ngx-datatable-column name="Eliminar" [width]="80">
                     <ng-template let-row="row" ngx-datatable-cell-template>
 
@@ -236,6 +229,7 @@
 
                     </ng-template>
                   </ngx-datatable-column>
+
                 </ngx-datatable>
               </div>
             </div>

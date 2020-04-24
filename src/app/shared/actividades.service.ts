@@ -7,6 +7,7 @@ const {apiUrl} = environment
 
 export interface ICreateActividad {
   rol: string;
+  name: string;
   fechaInicio: string;
   fechaFin: string;
 }
@@ -14,8 +15,7 @@ export interface ICreateActividad {
 export interface ICreateDetalleActividad {
   actividadId: string;
   descripcionActividad: string;
-  fechaFin: string;
-  fechaInicio: string;
+  fechaInicio: Date;
   observacionActividad: string;
   productoDigitalEntregable: string;
   avancePorcentaje: string;
@@ -39,6 +39,7 @@ export class ActividadesService {
 
 
   getActividades(rol) {
+
     return this.http.get<any>(`${apiUrl}/actividades/actividadesList`, {params: {rol}}).toPromise();
   }
 
@@ -46,8 +47,16 @@ export class ActividadesService {
     return this.http.get<any>(`${apiUrl}/actividades/actividadesDetalleList`, {params: {actividadId}}).toPromise();
   }
 
+  getActiDetaAutorizador(actividadId) {
+    return this.http.get<any>(`${apiUrl}/actividades/actiDetaListAutorizador`, {params: {actividadId}}).toPromise();
+  }
+
   updateDetalleActividad(id, newObjeto) {
     return this.http.post<any>(`${apiUrl}/actividades/updateDetalleActividad/${id}`, newObjeto).toPromise();
+  }
+
+  aprobacionAutorizador(id, newObjeto) {
+    return this.http.post<any>(`${apiUrl}/actividades/aprobacionAutorizador/${id}`, newObjeto).toPromise();
   }
 
   deleteDetalleActividad(detalleId) {

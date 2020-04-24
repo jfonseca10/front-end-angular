@@ -100,4 +100,10 @@ export class AuthService {
     return this.http.get<any>(`${apiUrl}/user/getDatoEmpleado`,{params: {rol}}).toPromise();
   }
 
+  // getNombreCompletoEmpleado(rol)
+  // {
+  //   console.log('ingreso a servcio', rol)
+  //   return this.http.get<any>(`${apiUrl}/user/getDatoEmpleado`,{params: {rol}}).toPromise();
+  // }
+
 }

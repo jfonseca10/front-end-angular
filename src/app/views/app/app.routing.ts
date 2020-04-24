@@ -16,6 +16,10 @@ const routes: Routes = [
         path: 'actividades',
         loadChildren: () => import('./actividades/actividades.module').then(m => m.ActividadesModule)
       },
+      {
+        path: 'aprobaciones',
+        loadChildren: () => import('./aprobaciones/aprobaciones.module').then(m => m.AprobacionesModule)
+      },
       {path: 'location', loadChildren: () => import('./location/location.module').then(m => m.LocationModule)},
       {path: '', pathMatch: 'full', redirectTo: 'vien'},
       {path: 'vien', loadChildren: () => import('./vien/vien.module').then(m => m.VienModule)},
@@ -23,7 +27,7 @@ const routes: Routes = [
         path: 'second-menu',
         loadChildren: () => import('./second-menu/second-menu.module').then(m => m.SecondMenuModule)
       },
-      {path: 'blank-page', component: BlankPageComponent},
+      {path: 'blank-page', component: BlankPageComponent,},
     ]
   }
 ];

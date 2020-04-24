@@ -10,6 +10,7 @@ import { TabsetComponent } from "ngx-bootstrap";
 import * as moment from 'moment';
 import { BsModalService, BsModalRef } from "ngx-bootstrap/modal";
 
+
 @Component({
   selector: 'app-actividades',
   templateUrl: 'actividades.component.html',
@@ -46,12 +47,8 @@ export class ActividadesComponent implements OnInit {
       prop: 'descripcionActividad'
     },
     {
-      name: 'Fecha Hora Inicio',
-      prop: 'desdeDiaSemana'
-    },
-    {
-      name: 'Fecha Hora Fin',
-      prop: 'hastaDiaSemana'
+      name: 'Dia Actividad',
+      prop: 'diaSemana'
     },
     {
       name: 'Producto Entregable',
@@ -70,14 +67,14 @@ export class ActividadesComponent implements OnInit {
       prop: 'avancePorcentaje'
     }];
 
-  loadingIndicator = false;
+  loadingIndicator = true;
   detalleActividadesTmp = [];
   detalleActividades = [];
   actividades = [];
   rows = [];
   porcentajesAvances = ['10', '20', '30', '40', '50', '60', '70', '80', '90', '100'];
   reorderable: true;
-  ColumnMode: ColumnMode;
+  ColumnMode: ColumnMode.force;
   items: any;
   detalilSelected = null;
   fechaInicioSemana: any;
@@ -180,7 +177,6 @@ export class ActividadesComponent implements OnInit {
     this.valorDetalle = actividadId
 
     this.actividadesService.getActividadesDetalle(actividadId).then(result => {
-      console.log('ss', result)
       this.detalleActividades = result
       this.detalleActividadesTmp = result
 
@@ -193,9 +189,10 @@ export class ActividadesComponent implements OnInit {
     const rangoFechas = value.split(',');
     const fechaInicio = rangoFechas[0];
     const fechaFin = rangoFechas[1];
-    const {rol} = this.authService.currentUserValue;
+    const {rol, name} = this.authService.currentUserValue;
     const datos = {
       rol,
+      name,
       fechaInicio,
       fechaFin
     }
@@ -229,8 +226,8 @@ export class ActividadesComponent implements OnInit {
       observacionActividad: data.observacionActividad || null,
       referenciaActividad: data.referenciaActividad || null,
       productoDigitalEntregable: data.productoDigitalEntregable || null,
-      fechaInicio: data.desdeDiaSemana ? moment(data.desdeDiaSemana).utc().format('YYYY-MM-DDTHH:mm:ss') : null,
-      fechaFin: data.hastaDiaSemana ? moment(data.hastaDiaSemana).utc().format('YYYY-MM-DDTHH:mm:ss') : null,
+      fechaInicio: data.diaSemana ? moment(data.diaSemana).utc().format('YYYY-MM-DD') : null,
+      // fechaInicio: data.diaSemana ? moment(data.diaSemana).utc().format('YYYY-MM-DDTHH:mm:ss') : null,
       avancePorcentaje: data.avancePorcentaje || null,
     })
   }
@@ -266,7 +263,7 @@ export class ActividadesComponent implements OnInit {
       return;
     }
     const {
-      descripcionActividad, fechaFin, fechaInicio, observacionActividad, avancePorcentaje,
+      descripcionActividad, fechaInicio, observacionActividad, avancePorcentaje,
       productoDigitalEntregable, referenciaActividad
     } = this.actividadesDetalleForm.value
 
@@ -274,7 +271,6 @@ export class ActividadesComponent implements OnInit {
     const objeto = {
       actividadId,
       descripcionActividad,
-      fechaFin,
       fechaInicio,
       observacionActividad,
       avancePorcentaje,
@@ -299,6 +295,7 @@ export class ActividadesComponent implements OnInit {
     } else {
       const {detalleId} = this.detalilSelected
       this.actividadesService.updateDetalleActividad(detalleId, this.actividadesDetalleForm.value).then(result => {
+        console.log('el ureslt update', result)
         this.actividadesService.getActividadesDetalle(actividadId).then(result => {
           this.detalleActividades = result
           this.actividadesDetalleForm.resetForm();

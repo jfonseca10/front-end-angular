@@ -5,7 +5,7 @@
 export const environment = {
   production: true,
   // apiUrl:  'http://localhost:8081/',
-  apiUrl: 'https://nodejs.eeq.com.ec:8080/',
+  apiUrl: 'https://nodejs.eeq.com.ec:8080',
   defaultMenuType: 'menu-default',
   subHiddenBreakpoint: 1440,
   menuHiddenBreakpoint: 768,
