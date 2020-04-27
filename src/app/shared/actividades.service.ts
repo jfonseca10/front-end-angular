@@ -63,5 +63,9 @@ export class ActividadesService {
     return this.http.post<any>(`${apiUrl}/actividades/deleteDetalleActividad`, {detalleId}).toPromise();
   }
 
+  deleteActividad(actividadId) {
+    return this.http.post<any>(`${apiUrl}/actividades/deleteActividad`, {actividadId}).toPromise();
+  }
+
 
 }

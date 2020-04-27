@@ -20,7 +20,7 @@ import { BsModalService, BsModalRef } from "ngx-bootstrap/modal";
 export class ActividadesComponent implements OnInit {
   modalRef: BsModalRef;
   message: string;
-
+  buttonState = '';
   bsValue = new Date();
   bsRangeValue: Date[];
   maxDate = new Date();
@@ -28,6 +28,7 @@ export class ActividadesComponent implements OnInit {
   @ViewChild('actividadesDetalleForm') actividadesDetalleForm: NgForm;
   @ViewChild('activityTab') activityTab: TabsetComponent;
   @ViewChild('activityTable', {static: false}) table: DatatableComponent;
+  @ViewChild('cabActivityTable', {static: false}) cabtable: DatatableComponent;
   buttonDisabled = false;
   actividadesColumns = [
     {
@@ -69,6 +70,7 @@ export class ActividadesComponent implements OnInit {
 
   loadingIndicator = true;
   detalleActividadesTmp = [];
+  actividadesTmp = [];
   detalleActividades = [];
   actividades = [];
   rows = [];
@@ -92,6 +94,11 @@ export class ActividadesComponent implements OnInit {
     this.modalRef = this.modalService.show(template, {class: 'modal-sm'});
   }
 
+  abrirModalCabActi(templateCabActi: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(templateCabActi, {class: 'modal-sm'});
+  }
+
+
   confirm(row): void {
     const {detalleId, actividadId} = row
     this.message = 'Confirmed!';
@@ -104,7 +111,7 @@ export class ActividadesComponent implements OnInit {
         this.actividadesDetalleForm.resetForm();
       });
 
-      this.notifications.create('Actividad Agregada', 'Se agrego correctamente', NotificationType.Success, {
+      this.notifications.create('Actividad Diaria Elimnada', 'Se elimino correctamente', NotificationType.Error, {
         theClass: 'outline primary',
         timeOut: 3000,
         showProgressBar: true
@@ -130,6 +137,7 @@ export class ActividadesComponent implements OnInit {
     const {rol} = this.authService.currentUserValue;
     this.actividadesService.getActividades(rol).then(result => {
       this.actividades = result
+      this.actividadesTmp = result;
     });
 
   }
@@ -200,6 +208,7 @@ export class ActividadesComponent implements OnInit {
       console.log('fornt', result)
       this.actividadesService.getActividades(rol).then(result => {
         this.actividades = result;
+        this.actividadesTmp = result;
         this.actividadesForm.resetForm();
 
       })
@@ -232,7 +241,49 @@ export class ActividadesComponent implements OnInit {
     })
   }
 
-  handleDelete(row) {
+  deleteActividadSemanal(row): void {
+    const {actividadId} = row
+    const rol = this.authService.currentUserValue.rol;
+    this.message = 'Confirmed!';
+    console.log('eliminar', actividadId)
+    this.actividadesService.deleteActividad(actividadId).then(result => {
+      console.log('rre', result)
+      this.actividadesService.getActividades(rol).then(result => {
+        this.actividadesTmp = result
+        this.actividades = result
+        this.actividadesForm.resetForm();
+      });
+
+      this.notifications.create('Actividad Semanal Eliminada', 'Se elimino correctamente', NotificationType.Alert, {
+        theClass: 'outline primary',
+        timeOut: 3000,
+        showProgressBar: true
+      })
+    });
+    this.modalRef.hide();
+  }
+
+  updateFilterActividad(event) {
+    const val = event.target.value.toLowerCase();
+
+    // filter our data
+    const temp = this.actividadesTmp.filter(function (d) {
+      let valid = false;
+      for (let key in d) {
+        if (!valid && d[key]) {
+          valid = d[key].toLowerCase().indexOf(val) !== -1 || !val
+        }
+      }
+      return valid
+      // return d.name.toLowerCase().indexOf(val) !== -1 || !val;
+    });
+
+    console.log(temp, 'ejjjj')
+
+    // update the rows
+    this.actividades = temp;
+    // Whenever the filter changes, always go back to the first page
+    this.cabtable.offset = 0;
   }
 
   updateFilter(event) {
@@ -250,6 +301,8 @@ export class ActividadesComponent implements OnInit {
       // return d.name.toLowerCase().indexOf(val) !== -1 || !val;
     });
 
+    console.log(temp, 'ejjjj')
+
     // update the rows
     this.detalleActividades = temp;
     // Whenever the filter changes, always go back to the first page
@@ -257,9 +310,14 @@ export class ActividadesComponent implements OnInit {
   }
 
   agregarDetalleActividad() {
-    const actividadId = this.valorDetalle
-    console.log(actividadId, 'JJJ')
-    if (!this.actividadesDetalleForm.valid || this.buttonDisabled) {
+    const actividadId = this.valorDetalle;
+    console.log('res', this.actividadesDetalleForm.valid);
+    if (!this.actividadesDetalleForm.valid || this.actividadesForm.submitted) {
+      this.notifications.create('Verifique los campos', 'La descripicion, fecha y porcentaje son obligatorios', NotificationType.Error, {
+        theClass: 'outline primary',
+        timeOut: 3000,
+        showProgressBar: true
+      });
       return;
     }
     const {

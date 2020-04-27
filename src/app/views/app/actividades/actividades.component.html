@@ -45,9 +45,21 @@
                         </div>
                       </div>
                     </form>
+
+                    <div class="row">
+                      <input
+                        type="text"
+                        style="padding:8px;margin:15px auto;width:30%;"
+                        placeholder="Busqueda avanzada..."
+                        (keyup)="updateFilterActividad($event)"
+                      />
+                    </div>
+
                     <div class="row">
                       <div class="col-md-12">
-                        <ngx-datatable class="material fullscreen"
+                        <ngx-datatable style="align-items: center !important;"
+                                       #cabActivityTable
+                                       class="material fullscreen expandable"
                                        [rows]="actividades"
                                        [loadingIndicator]="loadingIndicator"
                                        [columns]="actividadesColumns"
@@ -81,9 +93,18 @@
                           </ngx-datatable-column>
                           <ngx-datatable-column name="Eliminar">
                             <ng-template let-row="row" ngx-datatable-cell-template>
-                              <button class="btn btn-primary" (click)="handleDelete(row)"><i
-                                class="iconsminds-file-edit"></i></button>
-                            </ng-template>
+                                <button type="button" class="btn btn-danger" (click)="abrirModalCabActi(templateCabActi)">
+                                  <i class="iconsminds-delete-file"></i>
+                                </button>
+                                <br><br>
+                                <ng-template #templateCabActi>
+                                  <div class="modal-body text-center">
+                                    <p>Esta seguro de eliminar el registro?</p>
+                                    <button type="button" class="btn btn-default" (click)="deleteActividadSemanal(row)" >Si</button>
+                                    <button type="button" class="btn btn-primary" (click)="decline()" >No</button>
+                                  </div>
+                                </ng-template>
+                              </ng-template>
                           </ngx-datatable-column>
                         </ngx-datatable>
                       </div>
@@ -105,7 +126,7 @@
 
                 <div class="col-4">
                   <div class="mt-4">
-                    <label>Descripcion</label>
+                    <label>Descripcion  (*)</label>
                     <textarea name="descripcionActividad" required ngModel #descripcionActividad="ngModel" class="form-control"
                               rows="3"></textarea>
                     <div *ngIf="!descripcionActividad.valid && actividadesForm.submitted" class="invalid-tooltip">Nombre es
@@ -137,14 +158,14 @@
                 </div>
                 <div class="col-2">
                   <div class="mt-4">
-                    <label>Fecha Actividad</label>
+                    <label>Fecha Actividad  (*)</label>
                     <input class="form-control" type="date" ngModel #fechaInicio="ngModel"
                            name="fechaInicio"/>
                   </div>
                 </div>
                 <div class="col-2">
                   <div class="mt-4">
-                    <label>Porcentaje/Avance%</label>
+                    <label>Porcentaje/Avance%   (*)</label>
                     <ng-select [items]="porcentajesAvances" [hideSelected]="true" bindLabel="regionName" ngModel
                                #avancePorcentaje="ngModel"
                                name="avancePorcentaje">
@@ -221,8 +242,8 @@
                       <br><br>
                       <ng-template #template>
                         <div class="modal-body text-center">
-                          <p>Do you want to confirm?</p>
-                          <button type="button" class="btn btn-default" (click)="confirm(row)" >Yes</button>
+                          <p>Esta seguro de eliminar el registro?</p>
+                          <button type="button" class="btn btn-default" (click)="confirm(row)" >Si</button>
                           <button type="button" class="btn btn-primary" (click)="decline()" >No</button>
                         </div>
                       </ng-template>

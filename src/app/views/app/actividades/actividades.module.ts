@@ -11,18 +11,19 @@ import { SimpleNotificationsModule } from "angular2-notifications";
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { CommonModule } from "@angular/common";
 import { ModalModule } from "ngx-bootstrap/modal";
+import { ComponentsStateButtonModule } from "../../../components/state-button/components.state-button.module";
 
 
 @NgModule({
-  imports: [ActividadesRoutingModule, SharedModule, LayoutContainersModule,
-    ReactiveFormsModule,
-    FormsModule,
-    TabsModule.forRoot(),
-    SimpleNotificationsModule.forRoot(),
-    FormsModule,
-    BsDatepickerModule.forRoot(),
-    CommonModule,
-    ModalModule.forRoot()],
+    imports: [ActividadesRoutingModule, SharedModule, LayoutContainersModule,
+        ReactiveFormsModule,
+        FormsModule,
+        TabsModule.forRoot(),
+        SimpleNotificationsModule.forRoot(),
+        FormsModule,
+        BsDatepickerModule.forRoot(),
+        CommonModule,
+        ModalModule.forRoot(), ComponentsStateButtonModule],
   exports: [],
   declarations: [ActividadesComponent, CreateActividadesComponent],
   providers: []
