@@ -11,7 +11,6 @@ export class AprobacionesService {
   }
 
   getSolicitantes(rol) {
-    console.log('servicio', rol)
     return this.http.get<any>(`${apiUrl}/actividades/actividadesListAutorizador`, {params: {rol}}).toPromise();
   }
 

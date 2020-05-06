@@ -38,8 +38,8 @@ export class ActividadesComponent implements OnInit {
       name: 'Fecha Fin Semana',
       prop: 'fechaFin'
     }, {
-      name: 'Rol Jefatura',
-      prop: 'rolAutorizador'
+      name: 'Estado',
+      prop: 'estadoActividad'
     }
   ];
   detalleActividadesColumns = [
@@ -66,6 +66,10 @@ export class ActividadesComponent implements OnInit {
     {
       name: 'Avance %',
       prop: 'avancePorcentaje'
+    },
+    {
+      name: 'Estado',
+      prop: 'aprobacionJefatura'
     }];
 
   loadingIndicator = true;
@@ -96,6 +100,10 @@ export class ActividadesComponent implements OnInit {
 
   abrirModalCabActi(templateCabActi: TemplateRef<any>) {
     this.modalRef = this.modalService.show(templateCabActi, {class: 'modal-sm'});
+  }
+
+  abrirModalEnvioSemana(templateEnviarSemana: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(templateEnviarSemana, {class: 'modal-sm'});
   }
 
 
@@ -136,6 +144,7 @@ export class ActividadesComponent implements OnInit {
   ngOnInit() {
     const {rol} = this.authService.currentUserValue;
     this.actividadesService.getActividades(rol).then(result => {
+      console.log('semales son: ', result)
       this.actividades = result
       this.actividadesTmp = result;
     });
@@ -191,6 +200,35 @@ export class ActividadesComponent implements OnInit {
     });
   }
 
+  downloadActividades() {
+    if (this.valorDetalle) {
+      this.actividadesService.getReportExport(this.valorDetalle).subscribe(blob => {
+        const a = document.createElement('a');
+        const objectUrl = URL.createObjectURL(blob);
+        a.href = objectUrl;
+        a.download = 'report-actividad.xlsx';
+        a.click();
+        URL.revokeObjectURL(objectUrl);
+      })
+    }
+  }
+
+  descargarReport(row) {
+    const {actividadId} = row;
+    console.log('row', actividadId)
+    if (actividadId) {
+      this.actividadesService.getReportExportByActividad(actividadId).subscribe(blob => {
+        const a = document.createElement('a');
+        const objectUrl = URL.createObjectURL(blob);
+        console.log('el blob', objectUrl);
+        a.href = objectUrl;
+        a.download = 'report-actividad.xlsx';
+        a.click();
+        URL.revokeObjectURL(objectUrl);
+      });
+    }
+
+  }
 
   agregarSemanal() {
     const value = this.bsRangeValue.toLocaleString();
@@ -260,6 +298,30 @@ export class ActividadesComponent implements OnInit {
         showProgressBar: true
       })
     });
+    this.modalRef.hide();
+  }
+
+  enviarSemana(row): void {
+    const {actividadId} = row
+    const rol = this.authService.currentUserValue.rol;
+    this.actividadesService.enviarSemanaAprobacion(actividadId, row).then(result => {
+      console.log('rre', result)
+      this.actividadesService.getActividades(rol).then(result => {
+        this.actividadesTmp = result
+        this.actividades = result
+        this.actividadesForm.resetForm();
+      });
+    });
+    this.notifications.create('Actividad Semanal Enviada', 'Se envio correctamente', NotificationType.Success, {
+      theClass: 'outline success',
+      timeOut: 3000,
+      showProgressBar: true
+    });
+    this.modalRef.hide();
+  }
+
+  noEnviarSemana(): void {
+    this.message = 'Declined!';
     this.modalRef.hide();
   }
 
@@ -369,4 +431,6 @@ export class ActividadesComponent implements OnInit {
     }
 
   }
+
+
 }

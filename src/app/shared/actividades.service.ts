@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import { environment } from "../../environments/environment";
-import { formatDate } from "ngx-bootstrap";
+
 
 const {apiUrl} = environment
 
@@ -59,6 +59,18 @@ export class ActividadesService {
     return this.http.post<any>(`${apiUrl}/actividades/aprobacionAutorizador/${id}`, newObjeto).toPromise();
   }
 
+  devolverActiSoli(id, newObjeto) {
+    return this.http.post<any>(`${apiUrl}/actividades/devolverActividadSemana/${id}`, newObjeto).toPromise();
+  }
+
+  devolverDetaSoli(id, newObjeto) {
+    return this.http.post<any>(`${apiUrl}/actividades/devolverActividadDiaria/${id}`, newObjeto).toPromise();
+  }
+
+  enviarSemanaAprobacion(id, newObjeto) {
+    return this.http.post<any>(`${apiUrl}/actividades/enviarSemanaAprobacion/${id}`, newObjeto).toPromise();
+  }
+
   deleteDetalleActividad(detalleId) {
     return this.http.post<any>(`${apiUrl}/actividades/deleteDetalleActividad`, {detalleId}).toPromise();
   }
@@ -67,5 +79,20 @@ export class ActividadesService {
     return this.http.post<any>(`${apiUrl}/actividades/deleteActividad`, {actividadId}).toPromise();
   }
 
+  getReportExport(actividadId) {
+    return this.http.get<any>(`${apiUrl}/actividades/actividadesExport`, {
+      params: {actividadId}
+      //@ts-ignore
+      , responseType: 'blob'
+    });
+  }
+
+  getReportExportByActividad(actividadId) {
+    return this.http.get<any>(`${apiUrl}/actividades/actividadesExportReport`, {
+      params: {actividadId}
+      //@ts-ignore
+      , responseType: 'blob'
+    });
+  }
 
 }
