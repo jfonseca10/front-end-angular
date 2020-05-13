@@ -96,39 +96,44 @@
                           </ngx-datatable-column>
 
                           <ngx-datatable-column name="Descargar">
-                           <ng-template let-row="row" ngx-datatable-cell-template>
-                             <button class="btn btn-secondary" (click)="descargarReport(row)">
-                               <i class="iconsminds-data-download"></i>
-                             </button>
-                           </ng-template>
+                            <ng-template let-row="row" ngx-datatable-cell-template>
+                              <button class="btn btn-secondary" (click)="descargarReport(row)">
+                                <i class="iconsminds-data-download"></i>
+                              </button>
+                            </ng-template>
                           </ngx-datatable-column>
 
                           <ngx-datatable-column name="Eliminar">
                             <ng-template let-row="row" ngx-datatable-cell-template>
-                                <button type="button" class="btn btn-danger" (click)="abrirModalCabActi(templateCabActi)">
-                                  <i class="iconsminds-delete-file"></i>
-                                </button>
-                                <br><br>
-                                <ng-template #templateCabActi>
-                                  <div class="modal-body text-center">
-                                    <p>Esta seguro de eliminar el registro?   Se eliminaran las actividades diarias dentro de esa semana y no volvera a recuperarlas.</p>
-                                    <button type="button" class="btn btn-outline-danger" (click)="deleteActividadSemanal(row)" >Si</button>
-                                    <button type="button" class="btn btn-primary" (click)="decline()" >No</button>
-                                  </div>
-                                </ng-template>
+                              <button type="button" class="btn btn-danger" (click)="abrirModalCabActi(templateCabActi)">
+                                <i class="iconsminds-delete-file"></i>
+                              </button>
+                              <br><br>
+                              <ng-template #templateCabActi>
+                                <div class="modal-body text-center">
+                                  <p>Esta seguro de eliminar el registro? Se eliminaran las actividades diarias dentro
+                                    de esa semana y no volvera a recuperarlas.</p>
+                                  <button type="button" class="btn btn-outline-danger"
+                                          (click)="deleteActividadSemanal(row)">Si
+                                  </button>
+                                  <button type="button" class="btn btn-primary" (click)="decline()">No</button>
+                                </div>
                               </ng-template>
+                            </ng-template>
                           </ngx-datatable-column>
 
                           <ngx-datatable-column name="Enviar">
                             <ng-template let-row="row" ngx-datatable-cell-template>
-                              <button type="button" class="btn btn-success" (click)="abrirModalEnvioSemana(templateEnviarSemana)">
+                              <button type="button" class="btn btn-success"
+                                      (click)="abrirModalEnvioSemana(templateEnviarSemana)">
                                 <i class="iconsminds-mail-send"></i>
                               </button>
                               <br><br>
                               <ng-template #templateEnviarSemana>
                                 <div class="modal-body text-center">
                                   <p>Esta seguro de enviar el registro a su jefatura?</p>
-                                  <button type="button" class="btn btn-outline-success" (click)="enviarSemana(row)" >Si</button>
+                                  <button type="button" class="btn btn-outline-success" (click)="enviarSemana(row)">Si
+                                  </button>
                                   <button type="button" class="btn btn-primary" (click)="noEnviarSemana()">No</button>
                                 </div>
                               </ng-template>
@@ -154,10 +159,12 @@
 
                 <div class="col-4">
                   <div class="mt-4">
-                    <label>Descripcion  (*)</label>
-                    <textarea name="descripcionActividad" required ngModel #descripcionActividad="ngModel" class="form-control"
+                    <label>Descripcion (*)</label>
+                    <textarea name="descripcionActividad" required ngModel #descripcionActividad="ngModel"
+                              class="form-control"
                               rows="3"></textarea>
-                    <div *ngIf="!descripcionActividad.valid && actividadesForm.submitted" class="invalid-tooltip">Nombre es
+                    <div *ngIf="!descripcionActividad.valid && actividadesForm.submitted" class="invalid-tooltip">Nombre
+                      es
                       requerido!
                     </div>
                   </div>
@@ -186,17 +193,26 @@
                 </div>
                 <div class="col-2">
                   <div class="mt-4">
-                    <label>Fecha Actividad  (*)</label>
+                    <label>Fecha Actividad (*)</label>
                     <input class="form-control" type="date" ngModel #fechaInicio="ngModel"
                            name="fechaInicio"/>
                   </div>
                 </div>
+                <!--                <div class="col-2">-->
+                <!--                  <div class="mt-4">-->
+                <!--                    <label>Porcentaje/Avance%   (*)</label>-->
+                <!--                    <ng-select [items]="porcentajesAvances" [hideSelected]="true" bindLabel="regionName" ngModel-->
+                <!--                               #avancePorcentaje="ngModel"-->
+                <!--                               name="avancePorcentaje">-->
+                <!--                    </ng-select>-->
+                <!--                  </div>-->
+                <!--                </div>-->
                 <div class="col-2">
                   <div class="mt-4">
-                    <label>Porcentaje/Avance%   (*)</label>
-                    <ng-select [items]="porcentajesAvances" [hideSelected]="true" bindLabel="regionName" ngModel
-                               #avancePorcentaje="ngModel"
-                               name="avancePorcentaje">
+                    <label>Etapa (*)</label>
+                    <ng-select [items]="tareas" [hideSelected]="true" bindLabel="regionName" ngModel
+                               #etapaActividad="ngModel"
+                               name="etapaActividad">
                     </ng-select>
                   </div>
                 </div>
@@ -213,10 +229,7 @@
                 </div>
               </div>
             </form>
-            <div class="row">
-              <button class="btn btn-danger" (click)="downloadActividades()">
-                <i class="iconsminds-instagram"></i>Descargar</button>
-            </div>
+
             <div class="row">
               <input
                 type="text"
@@ -228,44 +241,45 @@
             <div class="row">
               <div class="col-md-12">
                 <ngx-datatable style="align-items: center !important;"
-                  #activityTable
-                  class="material fullscreen expandable"
-                  [rows]="detalleActividades"
-                  [loadingIndicator]="loadingIndicator"
-                  [columns]="detalleActividadesColumns"
-                  [headerHeight]="50"
-                  [footerHeight]="50"
-                  [reorderable]="reorderable"
-                  [columnMode]="ColumnMode"
-                  [limit]="5"
-                  [summaryPosition]="'bottom'"
-                  [scrollbarH]="true"
-                  rowHeight="auto">
+                               #activityTable
+                               class="material fullscreen expandable"
+                               [rows]="detalleActividades"
+                               [loadingIndicator]="loadingIndicator"
+                               [columns]="detalleActividadesColumns"
+                               [headerHeight]="50"
+                               [footerHeight]="50"
+                               [reorderable]="reorderable"
+                               [columnMode]="ColumnMode"
+                               [limit]="5"
+                               [summaryPosition]="'bottom'"
+                               [scrollbarH]="true"
+                               rowHeight="auto">
 
-                  <ngx-datatable-column name="Descripcion" prop="descripcionActividad" [width]="225">
+                  <ngx-datatable-column name="Descripcion" prop="descripcionActividad" [width]="200">
                   </ngx-datatable-column>
 
-                  <ngx-datatable-column name="Fecha Actividad" prop="diaSemana" [width]="125">
+                  <ngx-datatable-column name="Fecha Actividad" prop="diaSemana" [width]="117">
                     <ng-template let-row="row" ngx-datatable-cell-template>
                       {{renderDateToStr(row.diaSemana)}}
                     </ng-template>
                   </ngx-datatable-column>
                   <ngx-datatable-column name="Producto Digital" prop="productoDigitalEntregable"
-                                        [width]="225"></ngx-datatable-column>
+                                        [width]="200"></ngx-datatable-column>
                   <ngx-datatable-column name="Referencia" prop="referenciaActividad"
-                                        [width]="110"></ngx-datatable-column>
+                                        [width]="105"></ngx-datatable-column>
                   <ngx-datatable-column name="Observaciones" prop="observacionActividad"
-                                        [width]="225"></ngx-datatable-column>
-                  <ngx-datatable-column name="Avance %" prop="avancePorcentaje" [width]="80"></ngx-datatable-column>
-                  <ngx-datatable-column name="Estado" prop="aprobacionJefatura" [width]="80"></ngx-datatable-column>
-                  <ngx-datatable-column name="Editar" [width]="80">
+                                        [width]="200"></ngx-datatable-column>
+                  <!--                  <ngx-datatable-column name="Avance %" prop="avancePorcentaje" [width]="80"></ngx-datatable-column>-->
+                  <ngx-datatable-column name="Etapa" prop="etapaActividad" [width]="125"></ngx-datatable-column>
+                  <ngx-datatable-column name="Estado" prop="aprobacionJefatura" [width]="134"></ngx-datatable-column>
+                  <ngx-datatable-column name="Editar" [width]="79">
                     <ng-template let-row="row" ngx-datatable-cell-template>
                       <button class="btn btn-primary" (click)="detailEdit(row)"><i
                         class="iconsminds-file-edit"></i></button>
                     </ng-template>
                   </ngx-datatable-column>
 
-                  <ngx-datatable-column name="Eliminar" [width]="80">
+                  <ngx-datatable-column name="Eliminar" [width]="79">
                     <ng-template let-row="row" ngx-datatable-cell-template>
 
                       <button type="button" class="btn btn-danger" (click)="openModal(template)">
@@ -275,8 +289,8 @@
                       <ng-template #template>
                         <div class="modal-body text-center">
                           <p>Esta seguro de eliminar el registro?</p>
-                          <button type="button" class="btn btn-default" (click)="confirm(row)" >Si</button>
-                          <button type="button" class="btn btn-primary" (click)="decline()" >No</button>
+                          <button type="button" class="btn btn-default" (click)="confirm(row)">Si</button>
+                          <button type="button" class="btn btn-primary" (click)="decline()">No</button>
                         </div>
                       </ng-template>
 

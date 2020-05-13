@@ -18,5 +18,10 @@ export class RegistroAsistenciasService {
     return this.http.post<any>(`${apiUrl}/registroAsistencia/finAsistencia`, {rol}).toPromise();
   }
 
+  consultarRegistroAsistencias(rol, startDate, endDate) {
+    return this.http.post<any>(`${apiUrl}/registroAsistencia/consultarRegistroAsistencias`, {rol, startDate, endDate
+    }).toPromise();
+  }
+
 
 }

@@ -64,8 +64,8 @@ export class ActividadesComponent implements OnInit {
       prop: 'observacionActividad'
     },
     {
-      name: 'Avance %',
-      prop: 'avancePorcentaje'
+      name: 'Etapa',
+      prop: 'etapaActividad'
     },
     {
       name: 'Estado',
@@ -78,7 +78,8 @@ export class ActividadesComponent implements OnInit {
   detalleActividades = [];
   actividades = [];
   rows = [];
-  porcentajesAvances = ['10', '20', '30', '40', '50', '60', '70', '80', '90', '100'];
+  // porcentajesAvances = ['10', '20', '30', '40', '50', '60', '70', '80', '90', '100'];
+  tareas = ['NO INICIADO', 'EN PROCESO', 'CULMINADO'];
   reorderable: true;
   ColumnMode: ColumnMode.force;
   items: any;
@@ -161,6 +162,7 @@ export class ActividadesComponent implements OnInit {
       const {rol} = result
       this.actividadesService.getActividades(rol).then(result => {
         this.actividades = result;
+        this.actividadesTmp = result;
         this.actividadesForm.resetForm();
 
       });
@@ -178,7 +180,6 @@ export class ActividadesComponent implements OnInit {
   }
 
   cancelar() {
-    console.log('ingreo a cancelar');
     this.actividadesDetalleForm.resetForm();
     this.detalilSelected = null;
     this.buttonLabel = 'Agregar';
@@ -266,6 +267,7 @@ export class ActividadesComponent implements OnInit {
   }
 
   detailEdit(data) {
+    console.log('jose', data)
     this.buttonLabel = 'Actualizar';
     this.detalilSelected = data;
     this.actividadesDetalleForm.setValue({
@@ -275,7 +277,8 @@ export class ActividadesComponent implements OnInit {
       productoDigitalEntregable: data.productoDigitalEntregable || null,
       fechaInicio: data.diaSemana ? moment(data.diaSemana).utc().format('YYYY-MM-DD') : null,
       // fechaInicio: data.diaSemana ? moment(data.diaSemana).utc().format('YYYY-MM-DDTHH:mm:ss') : null,
-      avancePorcentaje: data.avancePorcentaje || null,
+      // avancePorcentaje: data.avancePorcentaje || null,
+      etapaActividad: data.etapaActividad || null
     })
   }
 
@@ -327,30 +330,27 @@ export class ActividadesComponent implements OnInit {
 
   updateFilterActividad(event) {
     const val = event.target.value.toLowerCase();
-
     // filter our data
-    const temp = this.actividadesTmp.filter(function (d) {
+    const temp = this.actividadesTmp.filter(function (j) {
       let valid = false;
-      for (let key in d) {
-        if (!valid && d[key]) {
-          valid = d[key].toLowerCase().indexOf(val) !== -1 || !val
+      for (let key1 in j) {
+        if (!valid && j[key1]) {
+          valid = j[key1].toLowerCase().indexOf(val) !== -1 || !val
         }
       }
       return valid
       // return d.name.toLowerCase().indexOf(val) !== -1 || !val;
     });
 
-    console.log(temp, 'ejjjj')
-
     // update the rows
     this.actividades = temp;
+
     // Whenever the filter changes, always go back to the first page
     this.cabtable.offset = 0;
   }
 
   updateFilter(event) {
     const val = event.target.value.toLowerCase();
-
     // filter our data
     const temp = this.detalleActividadesTmp.filter(function (d) {
       let valid = false;
@@ -362,7 +362,6 @@ export class ActividadesComponent implements OnInit {
       return valid
       // return d.name.toLowerCase().indexOf(val) !== -1 || !val;
     });
-
     console.log(temp, 'ejjjj')
 
     // update the rows
@@ -384,7 +383,7 @@ export class ActividadesComponent implements OnInit {
     }
     const {
       descripcionActividad, fechaInicio, observacionActividad, avancePorcentaje,
-      productoDigitalEntregable, referenciaActividad
+      productoDigitalEntregable, referenciaActividad, etapaActividad
     } = this.actividadesDetalleForm.value
 
     console.log('frontjjj', this.actividadesDetalleForm.value)
@@ -395,7 +394,8 @@ export class ActividadesComponent implements OnInit {
       observacionActividad,
       avancePorcentaje,
       productoDigitalEntregable,
-      referenciaActividad
+      referenciaActividad,
+      etapaActividad
     };
     if (!this.detalilSelected) {
       this.actividadesService.createDetalleActividad(objeto).then(result => {

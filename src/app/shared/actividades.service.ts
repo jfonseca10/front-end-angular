@@ -20,6 +20,7 @@ export interface ICreateDetalleActividad {
   productoDigitalEntregable: string;
   avancePorcentaje: string;
   referenciaActividad: string;
+  etapaActividad: string;
 }
 
 @Injectable()
