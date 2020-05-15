@@ -9,6 +9,7 @@ import { AuthService } from "../../../shared/auth.service";
 import { TabsetComponent } from "ngx-bootstrap";
 import * as moment from 'moment';
 import { BsModalService, BsModalRef } from "ngx-bootstrap/modal";
+import { type } from "os";
 
 
 @Component({
@@ -335,7 +336,8 @@ export class ActividadesComponent implements OnInit {
       let valid = false;
       for (let key1 in j) {
         if (!valid && j[key1]) {
-          valid = j[key1].toLowerCase().indexOf(val) !== -1 || !val
+          const tempCompare = typeof j[key1] === 'string' ? j[key1].toLowerCase() : j[key1].toString();
+          valid = tempCompare.indexOf(val) !== -1 || !val
         }
       }
       return valid
