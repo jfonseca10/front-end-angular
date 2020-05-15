@@ -9,7 +9,6 @@ import { AuthService } from "../../../shared/auth.service";
 import { TabsetComponent } from "ngx-bootstrap";
 import * as moment from 'moment';
 import { BsModalService, BsModalRef } from "ngx-bootstrap/modal";
-import { type } from "os";
 
 
 @Component({
