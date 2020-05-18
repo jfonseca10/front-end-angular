@@ -398,39 +398,56 @@ export class ActividadesComponent implements OnInit {
       referenciaActividad,
       etapaActividad
     };
-    if (!this.detalilSelected) {
-      this.actividadesService.createDetalleActividad(objeto).then(result => {
-        console.log('eee', objeto)
-        this.actividadesService.getActividadesDetalle(actividadId).then(result => {
-          this.detalleActividadesTmp = result
-          this.detalleActividades = result
-          this.actividadesDetalleForm.resetForm();
-        });
 
-        this.notifications.create('Actividad Agregada', 'Se agrego correctamente', NotificationType.Success, {
+    const fInicio = moment(this.fechaInicioSemana).utc().format('YYYY-MM-DD')
+    const fFin = moment(this.fechaFinSemana).utc().format('YYYY-MM-DD')
+    if (fechaInicio < fInicio || fechaInicio > fFin){
+      this.notifications.create('Error Actividad', `No puede ingresar un registro fuera de la semana ${fInicio} y ${fFin}`, NotificationType.Error, {
+        theClass: 'outline primary',
+        timeOut: 6000,
+        showProgressBar: true
+      });
+      return;
+    }
+    else {
+      if (!this.detalilSelected) {
+        this.actividadesService.createDetalleActividad(objeto).then(result => {
+          this.actividadesService.getActividadesDetalle(actividadId).then(result => {
+            this.detalleActividadesTmp = result
+            this.detalleActividades = result
+            this.actividadesDetalleForm.resetForm();
+          });
+
+          this.notifications.create('Actividad Agregada', 'Se agrego correctamente', NotificationType.Success, {
+            theClass: 'outline primary',
+            timeOut: 3000,
+            showProgressBar: true
+          });
+        }).catch(e => {
+          this.notifications.create('Error Actividad', e.error, NotificationType.Error, {
+            theClass: 'outline primary',
+            timeOut: 6000,
+            showProgressBar: true
+          });
+        })
+      } else {
+        const {detalleId} = this.detalilSelected
+        this.actividadesService.updateDetalleActividad(detalleId, this.actividadesDetalleForm.value).then(result => {
+          console.log('el ureslt update', result)
+          this.actividadesService.getActividadesDetalle(actividadId).then(result => {
+            this.detalleActividades = result
+            this.actividadesDetalleForm.resetForm();
+          });
+          this.detalilSelected = null;
+          this.buttonLabel = 'Agregar';
+        });
+        this.notifications.create('Actividad Modificada', 'Se modifico correctamente', NotificationType.Info, {
           theClass: 'outline primary',
           timeOut: 3000,
           showProgressBar: true
         })
-      })
-    } else {
-      const {detalleId} = this.detalilSelected
-      this.actividadesService.updateDetalleActividad(detalleId, this.actividadesDetalleForm.value).then(result => {
-        console.log('el ureslt update', result)
-        this.actividadesService.getActividadesDetalle(actividadId).then(result => {
-          this.detalleActividades = result
-          this.actividadesDetalleForm.resetForm();
-        });
-        this.detalilSelected = null;
-        this.buttonLabel = 'Agregar';
-      });
-      this.notifications.create('Actividad Modificada', 'Se modifico correctamente', NotificationType.Info, {
-        theClass: 'outline primary',
-        timeOut: 3000,
-        showProgressBar: true
-      })
+      }
     }
-
   }
 
 
