@@ -1,4 +1,4 @@
-import { app } from "firebase";
+import { environment } from "../../environments/environment.prod";
 
 export interface IMenuItem {
   id?: string;
@@ -28,6 +28,13 @@ const data: IMenuItem[] = [
     icon: 'iconsminds-rename',
     label: 'Aprobaciones',
     to: '/app/aprobaciones'
+  },
+  {
+    id: 'fourth-menu',
+    icon: 'iconsminds-book',
+    label: 'Manual Usuario',
+    to: `${environment.apiUrl}user/manualExport`,
+    newWindow: true
   }
   // {
   //   id: 'location',

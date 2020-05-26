@@ -206,7 +206,9 @@ export class ActividadesComponent implements OnInit {
       this.actividadesService.getReportExport(this.valorDetalle).subscribe(blob => {
         const a = document.createElement('a');
         const objectUrl = URL.createObjectURL(blob);
+        console.log('eee', objectUrl)
         a.href = objectUrl;
+        console.log('eeeee', a)
         a.download = 'report-actividad.xlsx';
         a.click();
         URL.revokeObjectURL(objectUrl);
@@ -223,6 +225,7 @@ export class ActividadesComponent implements OnInit {
         const objectUrl = URL.createObjectURL(blob);
         console.log('el blob', objectUrl);
         a.href = objectUrl;
+        console.log('eeeee', a)
         a.download = 'report-actividad.xlsx';
         a.click();
         URL.revokeObjectURL(objectUrl);
@@ -401,15 +404,14 @@ export class ActividadesComponent implements OnInit {
 
     const fInicio = moment(this.fechaInicioSemana).utc().format('YYYY-MM-DD')
     const fFin = moment(this.fechaFinSemana).utc().format('YYYY-MM-DD')
-    if (fechaInicio < fInicio || fechaInicio > fFin){
+    if (fechaInicio < fInicio || fechaInicio > fFin) {
       this.notifications.create('Error Actividad', `No puede ingresar un registro fuera de la semana ${fInicio} y ${fFin}`, NotificationType.Error, {
         theClass: 'outline primary',
         timeOut: 6000,
         showProgressBar: true
       });
       return;
-    }
-    else {
+    } else {
       if (!this.detalilSelected) {
         this.actividadesService.createDetalleActividad(objeto).then(result => {
           this.actividadesService.getActividadesDetalle(actividadId).then(result => {
