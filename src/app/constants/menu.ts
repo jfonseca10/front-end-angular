@@ -33,7 +33,7 @@ const data: IMenuItem[] = [
     id: 'fourth-menu',
     icon: 'iconsminds-book',
     label: 'Manual Usuario',
-    to: `${environment.apiUrl}user/manualExport`,
+    to: `${environment.apiUrl}/user/manualExport`,
     newWindow: true
   }
   // {

@@ -14,7 +14,7 @@ import { ColumnMode, DatatableComponent } from "@swimlane/ngx-datatable";
 
 export class RegistroAsistenciaComponent implements OnInit {
 
-  btnSalida: boolean = true;
+  btnSalida: boolean = false;
   btnIniciar: boolean = false;
   fechaInicio: any;
   fechaFin: any;
@@ -63,7 +63,7 @@ export class RegistroAsistenciaComponent implements OnInit {
           showProgressBar: false
         })
       }, 1000)
-      this.btnIniciar = true
+      this.btnIniciar = false
       this.btnSalida = false
     })
   }
@@ -80,7 +80,7 @@ export class RegistroAsistenciaComponent implements OnInit {
         })
       }, 1000)
       this.btnIniciar = false
-      this.btnSalida = true
+      this.btnSalida = false
     })
   }
 
@@ -88,8 +88,11 @@ export class RegistroAsistenciaComponent implements OnInit {
   btnConsultarAsistencias() {
     this.tableAsistencias = false
     const {rol} = this.authService.currentUserValue;
-    const dateStart = this.datePipe.transform(this.fechaInicio, 'yyyy/MM/dd HH:mm:ss', 'GMT-5');
-    const dateEnd = this.datePipe.transform(this.fechaFin, 'yyyy/MM/dd HH:mm:ss', 'GMT-5');
+    const dateStart = this.datePipe.transform(this.fechaInicio, 'yyyy/MM/dd 00:00:00', 'GMT-5');
+    const dateEnd = this.datePipe.transform(this.fechaFin, 'yyyy/MM/dd 23:59:59', 'GMT-5');
+
+    console.log('incio',dateStart)
+    console.log('fin',dateEnd)
 
     this.registroAsistenciasService.consultarRegistroAsistencias(rol, dateStart, dateEnd).then(result => {
       this.registroAsistencias = result

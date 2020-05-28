@@ -39,8 +39,7 @@
                           </button>
                         </div>
                         <div class="col-xs-12 col-12 col-md-3 form-group">
-                          <button type="button" class="btn btn-primary" (click)="agregarSemanal()">Agregar
-                            Actividad Semanal
+                          <button type="button" class="btn btn-primary" (click)="agregarSemanal()">Grabar
                           </button>
                         </div>
                       </div>
@@ -61,7 +60,6 @@
                                        #cabActivityTable
                                        class="material fullscreen expandable"
                                        [rows]="actividades"
-                                       [loadingIndicator]="loadingIndicator"
                                        [columns]="actividadesColumns"
                                        [headerHeight]="50"
                                        [footerHeight]="50"
@@ -244,7 +242,6 @@
                                #activityTable
                                class="material fullscreen expandable"
                                [rows]="detalleActividades"
-                               [loadingIndicator]="loadingIndicator"
                                [columns]="detalleActividadesColumns"
                                [headerHeight]="50"
                                [footerHeight]="50"

@@ -21,21 +21,21 @@
       </svg>
     </a>
 
-    <div class="search" (click)="searchAreaClick($event)">
-      <input placeholder="Buscar..." [(ngModel)]="searchKey" (keyup)="searchKeyUp($event)">
-      <span class="search-icon" (click)="searchClick($event)">
-        <i class="simple-icon-magnifier"></i>
-      </span>
-    </div>
+<!--    <div class="search" (click)="searchAreaClick($event)">-->
+<!--      <input placeholder="Buscar..." [(ngModel)]="searchKey" (keyup)="searchKeyUp($event)">-->
+<!--      <span class="search-icon" (click)="searchClick($event)">-->
+<!--        <i class="simple-icon-magnifier"></i>-->
+<!--      </span>-->
+<!--    </div>-->
 
-    <div class="btn-group ml-2" dropdown *ngIf="!isSingleLang">
-      <button dropdownToggle type="button" class="language-button dropdown-toggle btn btn-light btn-sm">
-        {{currentLanguage | uppercase}} <span class="caret"></span>
-      </button>
-      <ul *dropdownMenu class="dropdown-menu" role="menu">
-        <li role="menuitem" *ngFor="let item of languages" (click)="onLanguageChange(item)"><a class="dropdown-item" href="javascript:;">{{item.label}}</a></li>
-      </ul>
-    </div>
+<!--    <div class="btn-group ml-2" dropdown *ngIf="!isSingleLang">-->
+<!--      <button dropdownToggle type="button" class="language-button dropdown-toggle btn btn-light btn-sm">-->
+<!--        {{currentLanguage | uppercase}} <span class="caret"></span>-->
+<!--      </button>-->
+<!--      <ul *dropdownMenu class="dropdown-menu" role="menu">-->
+<!--        <li role="menuitem" *ngFor="let item of languages" (click)="onLanguageChange(item)"><a class="dropdown-item" href="javascript:;">{{item.label}}</a></li>-->
+<!--      </ul>-->
+<!--    </div>-->
 
 <!--    <a class="btn btn-sm btn-outline-primary ml-2 d-none d-xl-inline-block" href="javascript:;">&nbsp;BUY&nbsp;</a>-->
   </div>
@@ -175,12 +175,12 @@
       </button>
 
       <div class="dropdown-menu dropdown-menu-right mt-3" *dropdownMenu role="menu">
-        <a class="dropdown-item c-pointer">Account</a>
-        <a class="dropdown-item c-pointer">Features</a>
-        <a class="dropdown-item c-pointer">History</a>
-        <a class="dropdown-item c-pointer">Support</a>
+<!--        <a class="dropdown-item c-pointer">Account</a>-->
+<!--        <a class="dropdown-item c-pointer">Features</a>-->
+<!--        <a class="dropdown-item c-pointer">History</a>-->
+<!--        <a class="dropdown-item c-pointer">Support</a>-->
         <li class="divider dropdown-divider"></li>
-        <a class="dropdown-item c-pointer" (click)="onSignOut()">Sign out</a>
+        <a class="dropdown-item c-pointer" (click)="onSignOut()">Salir</a>
       </div>
     </div>
 
