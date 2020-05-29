@@ -29,9 +29,10 @@
                       <br>
                       <div class="row">
                         <div class="col-xs-10 col-10 col-md-4 form-group">
-                          <input [bsConfig]="{dateInputFormat: 'YYYY-MM-DD'}" class="form-control"
+                          <input [bsConfig]="{ dateInputFormat: 'YYYY-MM-DD' }" class="form-control"
                                  #drp="bsDaterangepicker" bsDaterangepicker [(ngModel)]="bsRangeValue"
-                                 [ngModelOptions]="{standalone:true}">
+                                 [ngModelOptions]="{standalone:true}" (bsValueChange)="handleChangeDR($event)">
+
                         </div>
                         <div class="col-xs-12 col-12 col-md-3 form-group">
                           <button class="btn btn-info" (click)="drp.toggle()" [attr.aria-expanded]="drp.isOpen"

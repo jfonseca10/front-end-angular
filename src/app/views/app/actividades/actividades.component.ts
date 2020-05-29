@@ -89,6 +89,9 @@ export class ActividadesComponent implements OnInit {
   valorDetalle: any;
   buttonLabel = 'Agregar';
   private descripcionActividad: any;
+  dateStartWeek: string;
+  dateEndWeek: string;
+
 
   constructor(private modalService: BsModalService, private actividadesService: ActividadesService, private datePipe: DatePipe, private notifications: NotificationsService, private commonModule: CommonModule, private authService: AuthService) {
     this.maxDate.setDate(this.maxDate.getDate() + 7);
@@ -234,7 +237,8 @@ export class ActividadesComponent implements OnInit {
 
   }
 
-  agregarSemanal() {
+
+  agregarSemanalPrueba() {
     const value = this.bsRangeValue.toLocaleString();
     const rangoFechas = value.split(',');
     const fechaInicio = rangoFechas[0];
@@ -269,8 +273,36 @@ export class ActividadesComponent implements OnInit {
 
   }
 
+  agregarSemanal() {
+    const {rol, name} = this.authService.currentUserValue;
+    const datos = {
+      rol,
+      name,
+      fechaInicio: this.dateStartWeek,
+      fechaFin: this.dateEndWeek,
+    }
+    this.actividadesService.createActividad(datos).then(result => {
+      this.actividadesService.getActividades(rol).then(result => {
+        this.actividades = result;
+        this.actividadesTmp = result;
+        this.actividadesForm.resetForm();
+      })
+      this.notifications.create('Actividad Semanal', 'La actividad semanal fue creada exitosamente', NotificationType.Success, {
+        theClass: 'outline primary',
+        timeOut: 3000,
+        showProgressBar: true
+      })
+    }).catch(({error}) => {
+      this.notifications.create('Error', 'El rango de fechas es maximo de 7 dias y no se puede ingresar un dia que ya exista en el rango de su lista', NotificationType.Error, {
+        theClass: 'outline primary',
+        timeOut: 10000,
+        showProgressBar: false
+      });
+    });
+
+  }
+
   detailEdit(data) {
-    console.log('jose', data)
     this.buttonLabel = 'Actualizar';
     this.detalilSelected = data;
     this.actividadesDetalleForm.setValue({
@@ -291,7 +323,6 @@ export class ActividadesComponent implements OnInit {
     this.message = 'Confirmed!';
     console.log('eliminar', actividadId)
     this.actividadesService.deleteActividad(actividadId).then(result => {
-      console.log('rre', result)
       this.actividadesService.getActividades(rol).then(result => {
         this.actividadesTmp = result
         this.actividades = result
@@ -311,7 +342,6 @@ export class ActividadesComponent implements OnInit {
     const {actividadId} = row
     const rol = this.authService.currentUserValue.rol;
     this.actividadesService.enviarSemanaAprobacion(actividadId, row).then(result => {
-      console.log('rre', result)
       this.actividadesService.getActividades(rol).then(result => {
         this.actividadesTmp = result
         this.actividades = result
@@ -366,7 +396,6 @@ export class ActividadesComponent implements OnInit {
       return valid
       // return d.name.toLowerCase().indexOf(val) !== -1 || !val;
     });
-    console.log(temp, 'ejjjj')
 
     // update the rows
     this.detalleActividades = temp;
@@ -453,4 +482,11 @@ export class ActividadesComponent implements OnInit {
   }
 
 
+  handleChangeDR($event: Date[]) {
+    if ($event) {
+      this.dateStartWeek = moment($event[0]).format('YYYY-MM-DD')
+      this.dateEndWeek = moment($event[1]).format('YYYY-MM-DD')
+    }
+
+  }
 }
