@@ -88,13 +88,14 @@ export class RegistroAsistenciaComponent implements OnInit {
   btnConsultarAsistencias() {
     this.tableAsistencias = false
     const {rol} = this.authService.currentUserValue;
-    const dateStart = this.datePipe.transform(this.fechaInicio, 'yyyy/MM/dd 00:00:00', 'GMT-5');
-    const dateEnd = this.datePipe.transform(this.fechaFin, 'yyyy/MM/dd 23:59:59', 'GMT-5');
+    const dateStart = this.datePipe.transform(this.fechaInicio, 'yyyy/MM/dd 00:00:00');
+    const dateEnd = this.datePipe.transform(this.fechaFin, 'yyyy/MM/dd 23:59:59');
 
-    console.log('incio',dateStart)
-    console.log('fin',dateEnd)
+    console.log('incio', dateStart)
+    console.log('fin', dateEnd)
 
     this.registroAsistenciasService.consultarRegistroAsistencias(rol, dateStart, dateEnd).then(result => {
+      console.log('resu', result)
       this.registroAsistencias = result
       this.registroAsistenciasTmp = result
     });
