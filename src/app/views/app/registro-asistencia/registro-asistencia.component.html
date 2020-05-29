@@ -38,9 +38,19 @@
               <div class="container-fluid h-100">
                 <div class="row w-100 align-items-center">
                   <div class="col text-center">
-                    <button class="btn-lg btn-primary" [disabled]="btnIniciar" (click)="inicialJornada()"> Iniciar
+                    <button class="btn-lg btn-primary" [disabled]="btnIniciar" (click)="abrirModalInicialJornada(templateIncioJornada)"> Iniciar
                       Jornada Laboral
                     </button>
+                    <br><br>
+                    <ng-template #templateIncioJornada>
+                      <div class="modal-body text-center">
+                        <p>Esta seguro de INICIAR su jornada laboral?.</p>
+                        <button type="button" class="btn btn-outline-primary"
+                                (click)="inicialJornada()">Si
+                        </button>
+                        <button type="button" class="btn btn-primary" (click)="cerrarModalInicialJornada()">No</button>
+                      </div>
+                    </ng-template>
                   </div>
                 </div>
               </div>
@@ -54,10 +64,20 @@
               <div class="container-fluid h-100">
                 <div class="row w-100 align-items-center">
                   <div class="col text-center">
-                    <button class="btn-lg btn-danger" [disabled]="btnSalida" (click)="finalizarJornada()"> Finalizar
+                    <button class="btn-lg btn-danger" [disabled]="btnSalida" (click)="abrirModalFinJornada(templateFinJornada)"> Finalizar
                       Jornada
                       Laboral
                     </button>
+                    <br><br>
+                    <ng-template #templateFinJornada>
+                      <div class="modal-body text-center">
+                        <p>Esta seguro de FINALIZAR su jornada laboral?.</p>
+                        <button type="button" class="btn btn-outline-danger"
+                                (click)="finalizarJornada()">Si
+                        </button>
+                        <button type="button" class="btn btn-primary" (click)="cerrarModalFinJornada()">No</button>
+                      </div>
+                    </ng-template>
                   </div>
                 </div>
               </div>
