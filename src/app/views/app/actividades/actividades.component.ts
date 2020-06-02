@@ -91,6 +91,8 @@ export class ActividadesComponent implements OnInit {
   private descripcionActividad: any;
   dateStartWeek: string;
   dateEndWeek: string;
+  detalleHidden = true;
+  cabeceraHidden = false;
 
 
   constructor(private modalService: BsModalService, private actividadesService: ActividadesService, private datePipe: DatePipe, private notifications: NotificationsService, private commonModule: CommonModule, private authService: AuthService) {
@@ -189,7 +191,9 @@ export class ActividadesComponent implements OnInit {
   }
 
   handleEdit(value, tabId: number) {
-    this.activityTab.tabs[tabId].active = true;
+    this.detalleHidden = false
+    this.cabeceraHidden = true
+    // this.activityTab.tabs[tabId].active = true;
     const {actividadId, descripcionActividad, fechaInicio, fechaFin} = value
     this.fechaInicioSemana = this.datePipe.transform(fechaInicio, 'yyyy/MM/dd')
     this.fechaFinSemana = this.datePipe.transform(fechaFin, 'yyyy/MM/dd')
@@ -462,5 +466,10 @@ export class ActividadesComponent implements OnInit {
       this.dateEndWeek = moment($event[1]).format('YYYY-MM-DD')
     }
 
+  }
+
+  regresar() {
+    this.detalleHidden = true
+    this.cabeceraHidden = false
   }
 }
