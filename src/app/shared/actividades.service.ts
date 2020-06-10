@@ -34,7 +34,6 @@ export class ActividadesService {
   }
 
   createDetalleActividad(detalleActividades: ICreateDetalleActividad) {
-    console.log('el detalle es:', detalleActividades)
     return this.http.post<any>(`${apiUrl}/actividades/createDetalleActividad`, detalleActividades).toPromise();
   }
 

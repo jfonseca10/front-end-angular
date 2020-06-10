@@ -171,16 +171,9 @@ export class ActividadesComponent implements OnInit {
         this.actividadesForm.resetForm();
 
       });
-    }).catch(({error}) => {
-      this.buttonDisabled = false;
-      // this.buttonState = '';
-      console.log(error)
-      // this.notifications.create('Error', error.message, NotificationType.Bare, {
-      //   theClass: 'outline primary',
-      //   timeOut: 6000,
-      //   showProgressBar: false
-      // });
-    });
+    }).catch(e => {
+      console.log('jose', e)
+    })
 
   }
 
@@ -262,7 +255,8 @@ export class ActividadesComponent implements OnInit {
         showProgressBar: true
       })
     }).catch(({error}) => {
-      this.notifications.create('Error', 'El rango de fechas es maximo de 7 dias y no se puede ingresar un dia que ya exista en el rango de su lista', NotificationType.Error, {
+      console.log('jose', error)
+      this.notifications.create('Error', error, NotificationType.Error, {
         theClass: 'outline primary',
         timeOut: 10000,
         showProgressBar: false
@@ -387,7 +381,6 @@ export class ActividadesComponent implements OnInit {
       productoDigitalEntregable, referenciaActividad, etapaActividad
     } = this.actividadesDetalleForm.value
 
-    console.log('frontjjj', this.actividadesDetalleForm.value)
     const objeto = {
       actividadId,
       descripcionActividad,
@@ -398,64 +391,73 @@ export class ActividadesComponent implements OnInit {
       referenciaActividad,
       etapaActividad
     };
-
-    if (referenciaActividad.length > 120) {
-      this.notifications.create('Error Actividad', `No puede ingresar una referencia mayor a 120 caracteres`, NotificationType.Error, {
+    if (etapaActividad === null || etapaActividad === '') {
+      this.notifications.create('Error Actividad', `La etapa es un valor obligatorio`, NotificationType.Error, {
         theClass: 'outline primary',
         timeOut: 6000,
         showProgressBar: true
       });
       return;
-
     } else {
-      const fInicio = moment(this.fechaInicioSemana).utc().format('YYYY-MM-DD')
-      const fFin = moment(this.fechaFinSemana).utc().format('YYYY-MM-DD')
-      if (fechaInicio < fInicio || fechaInicio > fFin) {
-        this.notifications.create('Error Actividad', `No puede ingresar un registro fuera de la semana ${fInicio} y ${fFin}`, NotificationType.Error, {
+      if (referenciaActividad.length > 120) {
+        this.notifications.create('Error Actividad', `No puede ingresar una referencia mayor a 120 caracteres`, NotificationType.Error, {
           theClass: 'outline primary',
           timeOut: 6000,
           showProgressBar: true
         });
         return;
-      } else {
-        if (!this.detalilSelected) {
-          this.actividadesService.createDetalleActividad(objeto).then(result => {
-            this.actividadesService.getActividadesDetalle(actividadId).then(result => {
-              this.detalleActividadesTmp = result
-              this.detalleActividades = result
-              this.actividadesDetalleForm.resetForm();
-            });
 
-            this.notifications.create('Actividad Agregada', 'Se agrego correctamente', NotificationType.Success, {
+      } else {
+        const fInicio = moment(this.fechaInicioSemana).utc().format('YYYY-MM-DD')
+        const fFin = moment(this.fechaFinSemana).utc().format('YYYY-MM-DD')
+        if (fechaInicio < fInicio || fechaInicio > fFin) {
+          this.notifications.create('Error Actividad', `No puede ingresar un registro fuera de la semana ${fInicio} y ${fFin}`, NotificationType.Error, {
+            theClass: 'outline primary',
+            timeOut: 6000,
+            showProgressBar: true
+          });
+          return;
+        } else {
+          if (!this.detalilSelected) {
+            this.actividadesService.createDetalleActividad(objeto).then(result => {
+              this.actividadesService.getActividadesDetalle(actividadId).then(result => {
+                this.detalleActividadesTmp = result
+                this.detalleActividades = result
+                this.actividadesDetalleForm.resetForm();
+              });
+
+              this.notifications.create('Actividad Agregada', 'Se agrego correctamente', NotificationType.Success, {
+                theClass: 'outline primary',
+                timeOut: 3000,
+                showProgressBar: true
+              });
+            }).catch(e => {
+              this.notifications.create('Error Actividad', e.error, NotificationType.Error, {
+                theClass: 'outline primary',
+                timeOut: 6000,
+                showProgressBar: true
+              });
+            })
+          } else {
+            const {detalleId} = this.detalilSelected
+            this.actividadesService.updateDetalleActividad(detalleId, this.actividadesDetalleForm.value).then(result => {
+              console.log('el ureslt update', result)
+              this.actividadesService.getActividadesDetalle(actividadId).then(result => {
+                this.detalleActividades = result
+                this.actividadesDetalleForm.resetForm();
+              });
+              this.detalilSelected = null;
+              this.buttonLabel = 'Agregar';
+            });
+            this.notifications.create('Actividad Modificada', 'Se modifico correctamente', NotificationType.Info, {
               theClass: 'outline primary',
               timeOut: 3000,
               showProgressBar: true
-            });
-          }).catch(e => {
-            this.notifications.create('Error Actividad', e.error, NotificationType.Error, {
-              theClass: 'outline primary',
-              timeOut: 6000,
-              showProgressBar: true
-            });
-          })
-        } else {
-          const {detalleId} = this.detalilSelected
-          this.actividadesService.updateDetalleActividad(detalleId, this.actividadesDetalleForm.value).then(result => {
-            console.log('el ureslt update', result)
-            this.actividadesService.getActividadesDetalle(actividadId).then(result => {
-              this.detalleActividades = result
-              this.actividadesDetalleForm.resetForm();
-            });
-            this.detalilSelected = null;
-            this.buttonLabel = 'Agregar';
-          });
-          this.notifications.create('Actividad Modificada', 'Se modifico correctamente', NotificationType.Info, {
-            theClass: 'outline primary',
-            timeOut: 3000,
-            showProgressBar: true
-          })
+            })
+          }
         }
       }
+
     }
   }
 
