@@ -8,6 +8,7 @@ import { SimpleNotificationsModule } from "angular2-notifications";
 import { TabsModule } from "ngx-bootstrap";
 import { AprobacionesService } from "../../../shared/aprobaciones.service";
 import { ActividadesService } from "../../../shared/actividades.service";
+import { Angular2CsvModule } from "angular2-csv";
 
 @NgModule({
   imports: [
@@ -16,7 +17,8 @@ import { ActividadesService } from "../../../shared/actividades.service";
     FormsModule,
     SimpleNotificationsModule.forRoot(),
     AprobacionesRoutingModule,
-    TabsModule.forRoot()
+    TabsModule.forRoot(),
+    Angular2CsvModule
 
   ],
   declarations: [AprobacionesComponent],
