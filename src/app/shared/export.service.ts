@@ -9,7 +9,7 @@ const EXCEL_EXTENSION = '.xlsx';
   providedIn: 'root'
 })
 export class ExportService {
-  private static saveAsExcelFile(buffer: Buffer, filename: string): void {
+  private static saveAsExcelFile(buffer: any, filename: string): void {
     const data: Blob = new Blob([buffer], {type: EXCEL_TYPE})
     FileSaver.saveAs(data, `${filename}_${new Date().getTime()}${EXCEL_EXTENSION}`)
   }
