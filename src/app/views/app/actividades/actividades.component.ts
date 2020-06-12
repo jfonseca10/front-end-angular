@@ -367,6 +367,7 @@ export class ActividadesComponent implements OnInit {
   }
 
   agregarDetalleActividad() {
+    console.log('kose', this.actividadesDetalleForm.value)
     const actividadId = this.valorDetalle;
     if (!this.actividadesDetalleForm.valid || this.actividadesForm.submitted) {
       this.notifications.create('Verifique los campos', 'La descripicion, fecha y porcentaje son obligatorios', NotificationType.Error, {
@@ -376,10 +377,18 @@ export class ActividadesComponent implements OnInit {
       });
       return;
     }
-    const {
+
+    let {
       descripcionActividad, fechaInicio, observacionActividad, avancePorcentaje,
       productoDigitalEntregable, referenciaActividad, etapaActividad
     } = this.actividadesDetalleForm.value
+
+    if (referenciaActividad === null) {
+      referenciaActividad = 'n/a'
+    } else {
+      referenciaActividad = referenciaActividad
+    }
+
 
     const objeto = {
       actividadId,
@@ -399,6 +408,7 @@ export class ActividadesComponent implements OnInit {
       });
       return;
     } else {
+
       if (referenciaActividad.length > 120) {
         this.notifications.create('Error Actividad', `No puede ingresar una referencia mayor a 120 caracteres`, NotificationType.Error, {
           theClass: 'outline primary',
@@ -471,6 +481,12 @@ export class ActividadesComponent implements OnInit {
   }
 
   regresar() {
+    const {rol} = this.authService.currentUserValue;
+    this.actividadesService.getActividades(rol).then(result => {
+      console.log('semales son: ', result)
+      this.actividades = result
+      this.actividadesTmp = result;
+    });
     this.detalleHidden = true
     this.cabeceraHidden = false
   }
