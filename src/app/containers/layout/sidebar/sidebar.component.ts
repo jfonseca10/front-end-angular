@@ -1,9 +1,10 @@
-import { Component, OnInit, OnDestroy, HostListener} from '@angular/core';
-import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
-import { filter, map } from 'rxjs/operators';
-import { SidebarService, ISidebar } from './sidebar.service';
-import menuItems, { IMenuItem } from 'src/app/constants/menu';
-import { Subscription } from 'rxjs';
+import {Component, OnInit, OnDestroy, HostListener} from '@angular/core';
+import {Router, NavigationEnd, ActivatedRoute} from '@angular/router';
+import {filter, map} from 'rxjs/operators';
+import {SidebarService, ISidebar} from './sidebar.service';
+import menuItems, {IMenuItem} from 'src/app/constants/menu';
+import {Subscription} from 'rxjs';
+import {AuthGuard} from "../../../guards/auth.guard";
 
 @Component({
   selector: 'app-sidebar',
@@ -18,7 +19,11 @@ export class SidebarComponent implements OnInit, OnDestroy {
   sidebar: ISidebar;
   subscription: Subscription;
 
-  constructor(private router: Router, private sidebarService: SidebarService, private activatedRoute: ActivatedRoute) {
+  constructor(
+    private router: Router, private sidebarService: SidebarService, private activatedRoute: ActivatedRoute,
+    private authGuard: AuthGuard
+  ) {
+
     this.subscription = this.sidebarService.getSidebar().subscribe(
       res => {
         this.sidebar = res;
@@ -32,20 +37,22 @@ export class SidebarComponent implements OnInit, OnDestroy {
         filter((event) => event instanceof NavigationEnd),
         map(() => this.activatedRoute),
         map((route) => {
-          while (route.firstChild) { route = route.firstChild; }
+          while (route.firstChild) {
+            route = route.firstChild;
+          }
           return route;
         })
       ).subscribe((event) => {
-        const path = this.router.url.split('?')[0];
-        const paramtersLen = Object.keys(event.snapshot.params).length;
-        const pathArr = path.split('/').slice(0, path.split('/').length - paramtersLen);
-        this.currentUrl = pathArr.join('/');
-      });
+      const path = this.router.url.split('?')[0];
+      const paramtersLen = Object.keys(event.snapshot.params).length;
+      const pathArr = path.split('/').slice(0, path.split('/').length - paramtersLen);
+      this.currentUrl = pathArr.join('/');
+    });
 
     router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe((event: NavigationEnd) => {
-      const { containerClassnames } = this.sidebar;
+      const {containerClassnames} = this.sidebar;
       const toParentUrl = this.currentUrl.split('/').filter(x => x !== '')[1];
       if (toParentUrl !== undefined || toParentUrl !== null) {
         this.selectedParentMenu = toParentUrl.toLowerCase();
@@ -60,9 +67,10 @@ export class SidebarComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.menuItems = this.verifyMenuAccess(menuItems);
     setTimeout(() => {
       this.selectMenu();
-      const { containerClassnames } = this.sidebar;
+      const {containerClassnames} = this.sidebar;
       const nextClasses = this.getMenuClassesForResize(containerClassnames);
       this.sidebarService.setContainerClassnames(0, nextClasses.join(' '), this.sidebar.selectedMenuHasSubItems);
       this.isCurrentMenuHasSubItem();
@@ -84,7 +92,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   }
 
   isCurrentMenuHasSubItem() {
-    const { containerClassnames } = this.sidebar;
+    const {containerClassnames} = this.sidebar;
 
     const menuItem = this.menuItems.find(
       x => x.id === this.selectedParentMenu
@@ -102,7 +110,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   }
 
   changeSelectedParentHasNoSubmenu(parentMenu: string) {
-    const { containerClassnames } = this.sidebar;
+    const {containerClassnames} = this.sidebar;
     this.selectedParentMenu = parentMenu;
     this.viewingParentMenu = parentMenu;
     this.sidebarService.changeSelectedMenuHasSubItems(false);
@@ -110,8 +118,10 @@ export class SidebarComponent implements OnInit, OnDestroy {
   }
 
   openSubMenu(event: { stopPropagation: () => void; }, menuItem: IMenuItem) {
-    if (event) { event.stopPropagation(); }
-    const { containerClassnames, menuClickCount } = this.sidebar;
+    if (event) {
+      event.stopPropagation();
+    }
+    const {containerClassnames, menuClickCount} = this.sidebar;
 
     const selectedParent = menuItem.id;
     const hasSubMenu = menuItem.subs && menuItem.subs.length > 0;
@@ -151,7 +161,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   }
 
   toggle() {
-    const { containerClassnames, menuClickCount } = this.sidebar;
+    const {containerClassnames, menuClickCount} = this.sidebar;
     const currentClasses = containerClassnames.split(' ').filter(x => x !== '');
     if (
       currentClasses.includes('menu-sub-hidden') &&
@@ -206,7 +216,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     if (event && !event.isTrusted) {
       return;
     }
-    const { containerClassnames } = this.sidebar;
+    const {containerClassnames} = this.sidebar;
     const nextClasses = this.getMenuClassesForResize(containerClassnames);
     this.sidebarService.setContainerClassnames(0, nextClasses.join(' '), this.sidebar.selectedMenuHasSubItems);
     this.isCurrentMenuHasSubItem();
@@ -214,5 +224,26 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   menuClicked(e: MouseEvent) {
     e.stopPropagation();
+  }
+
+  verifyMenuAccess(menuItems) {
+    const temp: IMenuItem[] = []
+    menuItems.map(item => {
+      if (item.access) {
+        if (this.authGuard.verifyPermission(item.access)) {
+          temp.push(item)
+        }
+      } else {
+        if (item.subs) {
+          const subs = this.verifyMenuAccess(item.subs);
+          if (subs.length > 0) {
+            temp.push({...item, subs})
+          }
+        } else {
+          temp.push(item)
+        }
+      }
+    })
+    return temp;
   }
 }

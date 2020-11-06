@@ -52,50 +52,50 @@ export class RegistroAsistenciaComponent implements OnInit {
     return moment(date).utc().subtract(5, 'hours').format('YYYY-MM-DD HH:mm:ss')
   }
 
-  inicialJornada() {
-    const {rol} = this.authService.currentUserValue
-    this.registroAsistenciasService.inicioJornada(rol).then(result => {
-      const {fechaHora} = result;
-      setTimeout(() => {
-        this.notifications.create('Hora de registro entrada', this.datePipe.transform(fechaHora, 'yyyy/MM/dd HH:mm:ss', 'GMT'), NotificationType.Success, {
-          theClass: 'outline primary',
-          timeOut: 10000,
-          showProgressBar: false
-        })
-      }, 1000)
-      this.btnIniciar = true
-      this.btnSalida = false
-    })
-  }
-
-  finalizarJornada() {
-    const {rol} = this.authService.currentUserValue
-    this.registroAsistenciasService.finJornada(rol).then(result => {
-      const {fechaHora} = result;
-      setTimeout(() => {
-        this.notifications.create('Hora de registro salida', this.datePipe.transform(fechaHora, 'yyyy/MM/dd HH:mm:ss', 'GMT'), NotificationType.Alert, {
-          theClass: 'outline primary',
-          timeOut: 10000,
-          showProgressBar: false
-        })
-      }, 1000)
-      this.btnIniciar = false
-      this.btnSalida = true
-    })
-  }
-
-
-  btnConsultarAsistencias() {
-    this.tableAsistencias = false
-    const {rol} = this.authService.currentUserValue;
-    const dateStart = this.datePipe.transform(this.fechaInicio, 'yyyy/MM/dd HH:mm:ss', 'GMT-5');
-    const dateEnd = this.datePipe.transform(this.fechaFin, 'yyyy/MM/dd HH:mm:ss', 'GMT-5');
-
-    this.registroAsistenciasService.consultarRegistroAsistencias(rol, dateStart, dateEnd).then(result => {
-      this.registroAsistencias = result
-      this.registroAsistenciasTmp = result
-    });
-  }
+  // inicialJornada() {
+  //   const {rol} = this.authService.currentUserValue
+  //   this.registroAsistenciasService.inicioJornada(rol).then(result => {
+  //     const {fechaHora} = result;
+  //     setTimeout(() => {
+  //       this.notifications.create('Hora de registro entrada', this.datePipe.transform(fechaHora, 'yyyy/MM/dd HH:mm:ss', 'GMT'), NotificationType.Success, {
+  //         theClass: 'outline primary',
+  //         timeOut: 10000,
+  //         showProgressBar: false
+  //       })
+  //     }, 1000)
+  //     this.btnIniciar = true
+  //     this.btnSalida = false
+  //   })
+  // }
+  //
+  // finalizarJornada() {
+  //   const {rol} = this.authService.currentUserValue
+  //   this.registroAsistenciasService.finJornada(rol).then(result => {
+  //     const {fechaHora} = result;
+  //     setTimeout(() => {
+  //       this.notifications.create('Hora de registro salida', this.datePipe.transform(fechaHora, 'yyyy/MM/dd HH:mm:ss', 'GMT'), NotificationType.Alert, {
+  //         theClass: 'outline primary',
+  //         timeOut: 10000,
+  //         showProgressBar: false
+  //       })
+  //     }, 1000)
+  //     this.btnIniciar = false
+  //     this.btnSalida = true
+  //   })
+  // }
+  //
+  //
+  // btnConsultarAsistencias() {
+  //   this.tableAsistencias = false
+  //   const {rol} = this.authService.currentUserValue;
+  //   const dateStart = this.datePipe.transform(this.fechaInicio, 'yyyy/MM/dd HH:mm:ss', 'GMT-5');
+  //   const dateEnd = this.datePipe.transform(this.fechaFin, 'yyyy/MM/dd HH:mm:ss', 'GMT-5');
+  //
+  //   this.registroAsistenciasService.consultarRegistroAsistencias(rol, dateStart, dateEnd).then(result => {
+  //     this.registroAsistencias = result
+  //     this.registroAsistenciasTmp = result
+  //   });
+  // }
 
   updateFilter(event) {
     const val = event.target.value.toLowerCase();

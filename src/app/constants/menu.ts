@@ -1,10 +1,12 @@
-import { app } from "firebase";
+import {app} from "firebase";
+import {AuthGuard} from '../guards/auth.guard'
 
 export interface IMenuItem {
   id?: string;
   icon?: string;
   label: string;
   to: string;
+  access?: string;
   newWindow?: boolean;
   subs?: IMenuItem[];
 }
@@ -13,22 +15,95 @@ const data: IMenuItem[] = [
 
   {
     id: 'first-menu',
-    icon: 'iconsminds-clock',
-    label: 'Registro Asistencia',
-    to: '/app/registro-asistencia'
+    icon: 'iconsminds-wrench',
+    label: 'ADMINISTRACIÓN',
+    to: '',
+    subs: [{
+      icon: 'simple-icon-home',
+      label: 'Site',
+      to: '/app/ubicacion',
+      access: 'permisoadmin:true'
+    }, {
+      icon: 'simple-icon-minus',
+      label: 'Modalidad',
+      to: '/app/modalidad',
+      access: 'permisoadmin:true'
+    }, {
+      icon: 'simple-icon-ghost',
+      label: 'Periodo',
+      to: '/app/periodo',
+      access: 'permisoadmin:true'
+    }, {
+      icon: 'simple-icon-hourglass',
+      label: 'Tipo Tutoria',
+      to: '/app/tipo-tutoria',
+      access: 'permisoadmin:true'
+    }, {
+      icon: 'simple-icon-present',
+      label: 'Sede',
+      to: '/app/sede',
+      access: 'permisoadmin:true'
+    }, {
+      icon: 'simple-icon-magnifier',
+      label: 'Carrera',
+      to: '/app/carrera',
+      access: 'permisoadmin:true'
+    }, {
+      icon: 'simple-icon-user',
+      label: 'Docentes',
+      to: '/app/docente',
+      access: 'permisoadmin:true'
+    }, {
+      icon: 'simple-icon-people',
+      label: 'Estudiantes',
+      to: '/app/estudiante',
+      access: 'permisoadmin:true'
+    }]
   },
   {
     id: 'second-menu',
-    icon: 'iconsminds-preview',
-    label: 'Actividades',
-    to: '/app/actividades'
+    icon: 'iconsminds-dashboard',
+    label: 'PROCESOS',
+    to: '/app/registro-asistencia',
+    subs: [{
+      icon: 'simple-icon-social-vkontakte',
+      label: 'Distributivo Tutorías',
+      to: '/app/cab-distributivo'
+    }, {
+      icon: 'simple-icon-paper-plane',
+      label: 'Encuesta y preguntas',
+      to: '/app/encuesta',
+      access: 'permisoadmin:true'
+    }]
   },
   {
     id: 'thirt-menu',
-    icon: 'iconsminds-rename',
-    label: 'Aprobaciones',
-    to: '/app/aprobaciones'
+    icon: 'iconsminds-preview',
+    label: 'BUSQUEDAS',
+    to: '/app/registro-asistencia'
+  }, {
+    id: 'four-menu',
+    icon: 'iconsminds-monitor-analytics',
+    label: 'REPORTES',
+    to: '/app/registro-asistencia'
+  }, {
+    id: 'five-menu',
+    icon: 'iconsminds-project',
+    label: 'ENCUESTA',
+    to: '/app/registro-asistencia'
   }
+  // {
+  //   id: 'second-menu1',
+  //   icon: 'iconsminds-preview',
+  //   label: 'Actividades',
+  //   to: '/app/actividades'
+  // },
+  // {
+  //   id: 'thirt-menu1',
+  //   icon: 'iconsminds-rename',
+  //   label: 'Aprobaciones',
+  //   to: '/app/aprobaciones'
+  // }
   // {
   //   id: 'location',
   //   icon: 'iconsminds-rename',
@@ -80,4 +155,4 @@ const data: IMenuItem[] = [
   //   newWindow: true
   // }
 ];
-export default data;
+export default data

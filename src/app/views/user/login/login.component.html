@@ -1,6 +1,6 @@
 <div class="card auth-card">
   <div class="position-relative image-side ">
-    <p class=" text-white h2">EMPRESA ELECTRICA QUITO S.A</p>
+    <p class=" text-white h2">UNIVERSIDAD METROPOLITANA</p>
     <p class="white mb-0">
       Por favor ingrese sus credenciales para iniciar sesión.
       <br>Si no eres miembro, por favor
@@ -16,15 +16,18 @@
 
     <form #loginForm="ngForm" novalidate (ngSubmit)="onSubmit()">
       <label class="form-group has-float-label">
-        <input class="form-control" required type="text" ngModel #rol="ngModel" name="rol"/>
-        <span>Rol</span>
-        <div *ngIf="!rol.valid && loginForm.submitted" class="invalid-tooltip">El rol es requerido..!</div>
+        <input class="form-control" required type="email" ngModel #email="ngModel" name="email"/>
+        <span>Email</span>
+        <div *ngIf="email?.errors?.email && loginForm.submitted" class="invalid-tooltip">Email debe ser una dirección
+          institucional ej: jose.fonseca@est.umet.edu.ec!
+        </div>
+        <div *ngIf="!email.valid && loginForm.submitted" class="invalid-tooltip">El email es requerido..!</div>
       </label>
       <label class="form-group has-float-label">
         <input class="form-control" type="password" placeholder="" required ngModel #password="ngModel"
                name="password"/>
-        <span>{{ 'user.password' | translate }}</span>
-        <div *ngIf="!password.valid && loginForm.submitted" class="invalid-tooltip">Password es requerido..!</div>
+        <span>{{ 'user.password' | translate }} </span>
+        <div *ngIf="!password.valid && loginForm.submitted" class="invalid-tooltip">El password es requerido..!</div>
       </label>
       <div class="d-flex justify-content-between align-items-center">
         <a routerLink="/user/forgot-password">{{ 'user.forgot-password' | translate }}?</a>

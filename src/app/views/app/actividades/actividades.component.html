@@ -39,9 +39,9 @@
                           </button>
                         </div>
                         <div class="col-xs-12 col-12 col-md-3 form-group">
-                          <button type="button" class="btn btn-primary" (click)="agregarSemanal()">Agregar
-                            Actividad Semanal
-                          </button>
+<!--                          <button type="button" class="btn btn-primary" (click)="agregarSemanal()">Agregar-->
+<!--                            Actividad Semanal-->
+<!--                          </button>-->
                         </div>
                       </div>
                     </form>
@@ -113,9 +113,9 @@
                                 <div class="modal-body text-center">
                                   <p>Esta seguro de eliminar el registro? Se eliminaran las actividades diarias dentro
                                     de esa semana y no volvera a recuperarlas.</p>
-                                  <button type="button" class="btn btn-outline-danger"
-                                          (click)="deleteActividadSemanal(row)">Si
-                                  </button>
+<!--                                  <button type="button" class="btn btn-outline-danger"-->
+<!--                                          (click)="deleteActividadSemanal(row)">Si-->
+<!--                                  </button>-->
                                   <button type="button" class="btn btn-primary" (click)="decline()">No</button>
                                 </div>
                               </ng-template>
@@ -124,17 +124,17 @@
 
                           <ngx-datatable-column name="Enviar">
                             <ng-template let-row="row" ngx-datatable-cell-template>
-                              <button type="button" class="btn btn-success"
-                                      (click)="abrirModalEnvioSemana(templateEnviarSemana)">
-                                <i class="iconsminds-mail-send"></i>
-                              </button>
+<!--                              <button type="button" class="btn btn-success"-->
+<!--                                      (click)="abrirModalEnvioSemana(templateEnviarSemana)">-->
+<!--                                <i class="iconsminds-mail-send"></i>-->
+<!--                              </button>-->
                               <br><br>
                               <ng-template #templateEnviarSemana>
                                 <div class="modal-body text-center">
                                   <p>Esta seguro de enviar el registro a su jefatura?</p>
-                                  <button type="button" class="btn btn-outline-success" (click)="enviarSemana(row)">Si
-                                  </button>
-                                  <button type="button" class="btn btn-primary" (click)="noEnviarSemana()">No</button>
+<!--                                  <button type="button" class="btn btn-outline-success" (click)="enviarSemana(row)">Si-->
+<!--                                  </button>-->
+<!--                                  <button type="button" class="btn btn-primary" (click)="noEnviarSemana()">No</button>-->
                                 </div>
                               </ng-template>
                             </ng-template>

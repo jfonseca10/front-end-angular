@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
-import { Router, ActivatedRouteSnapshot, RouterStateSnapshot, CanActivate } from '@angular/router';
-import { AuthService } from '../shared/auth.service';
+import {Injectable} from '@angular/core';
+import {Router, ActivatedRouteSnapshot, RouterStateSnapshot, CanActivate} from '@angular/router';
+import {AuthService} from '../shared/auth.service';
 
 @Injectable({providedIn: 'root'})
 
@@ -19,6 +19,14 @@ export class AuthGuard implements CanActivate {
       }
     });
     return false;
+  }
 
+  /**
+   * @example ['create.user:true','update.user:false'] => 'create.user:true'?true:false
+   * @param permission
+   */
+  verifyPermission(permission) {
+    const currentUser = this.authService.currentUserValue
+    return currentUser.permissions.indexOf(permission) >= 0
   }
 }

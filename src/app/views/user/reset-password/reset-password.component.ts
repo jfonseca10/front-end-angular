@@ -3,7 +3,6 @@ import { NgForm } from '@angular/forms';
 import { NotificationsService, NotificationType } from 'angular2-notifications';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from 'src/app/shared/auth.service';
-import { error } from "@angular/compiler/src/util";
 
 @Component({
   selector: 'app-reset-password',
@@ -11,8 +10,6 @@ import { error } from "@angular/compiler/src/util";
 })
 export class ResetPasswordComponent implements OnInit {
   @ViewChild('resetForm') resetForm: NgForm;
-  emailModel = 'demo@vien.com';
-  passwordModel = 'demovien1122';
 
   buttonDisabled = false;
   buttonState = '';
@@ -37,7 +34,7 @@ export class ResetPasswordComponent implements OnInit {
     this.buttonDisabled = true;
     this.buttonState = 'show-spinner';
     this.authService.resetPassword({code: this.code, npwd: this.resetForm.value.newPassword}).then(() => {
-      this.notifications.create('Done', 'Password reset completed, you will be redirected to Login page!', NotificationType.Bare, {
+      this.notifications.create('Done', 'Su password ha sido cambiada con exito!', NotificationType.Bare, {
         theClass: 'outline primary',
         timeOut: 6000,
         showProgressBar: true

@@ -143,12 +143,12 @@ export class ActividadesComponent implements OnInit {
   }
 
   ngOnInit() {
-    const {rol} = this.authService.currentUserValue;
-    this.actividadesService.getActividades(rol).then(result => {
-      console.log('semales son: ', result)
-      this.actividades = result
-      this.actividadesTmp = result;
-    });
+    // const {rol} = this.authService.currentUserValue;
+    // this.actividadesService.getActividades(rol).then(result => {
+    //   console.log('semales son: ', result)
+    //   this.actividades = result
+    //   this.actividadesTmp = result;
+    // });
 
   }
 
@@ -231,40 +231,40 @@ export class ActividadesComponent implements OnInit {
 
   }
 
-  agregarSemanal() {
-    const value = this.bsRangeValue.toLocaleString();
-    const rangoFechas = value.split(',');
-    const fechaInicio = rangoFechas[0];
-    const fechaFin = rangoFechas[1];
-    const {rol, name} = this.authService.currentUserValue;
-    const datos = {
-      rol,
-      name,
-      fechaInicio,
-      fechaFin
-    }
-    this.actividadesService.createActividad(datos).then(result => {
-      console.log('fornt', result)
-      this.actividadesService.getActividades(rol).then(result => {
-        this.actividades = result;
-        this.actividadesTmp = result;
-        this.actividadesForm.resetForm();
-
-      })
-      this.notifications.create('Actividad Semanal', 'La actividad semanal fue creada exitosamente', NotificationType.Success, {
-        theClass: 'outline primary',
-        timeOut: 3000,
-        showProgressBar: true
-      })
-    }).catch(({error}) => {
-      this.notifications.create('Error', 'El rango de fechas es maximo de 7 dias y no se puede ingresar un dia que ya exista en el rango de su lista', NotificationType.Error, {
-        theClass: 'outline primary',
-        timeOut: 10000,
-        showProgressBar: false
-      });
-    });
-
-  }
+  // agregarSemanal() {
+  //   const value = this.bsRangeValue.toLocaleString();
+  //   const rangoFechas = value.split(',');
+  //   const fechaInicio = rangoFechas[0];
+  //   const fechaFin = rangoFechas[1];
+  //   const {rol, name} = this.authService.currentUserValue;
+  //   const datos = {
+  //     rol,
+  //     name,
+  //     fechaInicio,
+  //     fechaFin
+  //   }
+  //   this.actividadesService.createActividad(datos).then(result => {
+  //     console.log('fornt', result)
+  //     this.actividadesService.getActividades(rol).then(result => {
+  //       this.actividades = result;
+  //       this.actividadesTmp = result;
+  //       this.actividadesForm.resetForm();
+  //
+  //     })
+  //     this.notifications.create('Actividad Semanal', 'La actividad semanal fue creada exitosamente', NotificationType.Success, {
+  //       theClass: 'outline primary',
+  //       timeOut: 3000,
+  //       showProgressBar: true
+  //     })
+  //   }).catch(({error}) => {
+  //     this.notifications.create('Error', 'El rango de fechas es maximo de 7 dias y no se puede ingresar un dia que ya exista en el rango de su lista', NotificationType.Error, {
+  //       theClass: 'outline primary',
+  //       timeOut: 10000,
+  //       showProgressBar: false
+  //     });
+  //   });
+  //
+  // }
 
   detailEdit(data) {
     console.log('jose', data)
@@ -282,46 +282,46 @@ export class ActividadesComponent implements OnInit {
     })
   }
 
-  deleteActividadSemanal(row): void {
-    const {actividadId} = row
-    const rol = this.authService.currentUserValue.rol;
-    this.message = 'Confirmed!';
-    console.log('eliminar', actividadId)
-    this.actividadesService.deleteActividad(actividadId).then(result => {
-      console.log('rre', result)
-      this.actividadesService.getActividades(rol).then(result => {
-        this.actividadesTmp = result
-        this.actividades = result
-        this.actividadesForm.resetForm();
-      });
+  // deleteActividadSemanal(row): void {
+  //   const {actividadId} = row
+  //   const rol = this.authService.currentUserValue.rol;
+  //   this.message = 'Confirmed!';
+  //   console.log('eliminar', actividadId)
+  //   this.actividadesService.deleteActividad(actividadId).then(result => {
+  //     console.log('rre', result)
+  //     this.actividadesService.getActividades(rol).then(result => {
+  //       this.actividadesTmp = result
+  //       this.actividades = result
+  //       this.actividadesForm.resetForm();
+  //     });
+  //
+  //     this.notifications.create('Actividad Semanal Eliminada', 'Se elimino correctamente', NotificationType.Alert, {
+  //       theClass: 'outline primary',
+  //       timeOut: 3000,
+  //       showProgressBar: true
+  //     })
+  //   });
+  //   this.modalRef.hide();
+  // }
 
-      this.notifications.create('Actividad Semanal Eliminada', 'Se elimino correctamente', NotificationType.Alert, {
-        theClass: 'outline primary',
-        timeOut: 3000,
-        showProgressBar: true
-      })
-    });
-    this.modalRef.hide();
-  }
-
-  enviarSemana(row): void {
-    const {actividadId} = row
-    const rol = this.authService.currentUserValue.rol;
-    this.actividadesService.enviarSemanaAprobacion(actividadId, row).then(result => {
-      console.log('rre', result)
-      this.actividadesService.getActividades(rol).then(result => {
-        this.actividadesTmp = result
-        this.actividades = result
-        this.actividadesForm.resetForm();
-      });
-    });
-    this.notifications.create('Actividad Semanal Enviada', 'Se envio correctamente', NotificationType.Success, {
-      theClass: 'outline success',
-      timeOut: 3000,
-      showProgressBar: true
-    });
-    this.modalRef.hide();
-  }
+  // enviarSemana(row): void {
+  //   const {actividadId} = row
+  //   const rol = this.authService.currentUserValue.rol;
+  //   this.actividadesService.enviarSemanaAprobacion(actividadId, row).then(result => {
+  //     console.log('rre', result)
+  //     this.actividadesService.getActividades(rol).then(result => {
+  //       this.actividadesTmp = result
+  //       this.actividades = result
+  //       this.actividadesForm.resetForm();
+  //     });
+  //   });
+  //   this.notifications.create('Actividad Semanal Enviada', 'Se envio correctamente', NotificationType.Success, {
+  //     theClass: 'outline success',
+  //     timeOut: 3000,
+  //     showProgressBar: true
+  //   });
+  //   this.modalRef.hide();
+  // }
 
   noEnviarSemana(): void {
     this.message = 'Declined!';

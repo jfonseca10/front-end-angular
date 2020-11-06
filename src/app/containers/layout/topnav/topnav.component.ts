@@ -1,10 +1,10 @@
-import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { SidebarService, ISidebar } from '../sidebar/sidebar.service';
-import { Router } from '@angular/router';
-import { LangService, Language } from 'src/app/shared/lang.service';
-import { AuthService } from 'src/app/shared/auth.service';
-import { environment } from 'src/environments/environment';
+import {Component, OnInit, OnDestroy, HostListener} from '@angular/core';
+import {Subscription} from 'rxjs';
+import {SidebarService, ISidebar} from '../sidebar/sidebar.service';
+import {Router} from '@angular/router';
+import {LangService, Language} from 'src/app/shared/lang.service';
+import {AuthService} from 'src/app/shared/auth.service';
+import {environment} from 'src/environments/environment';
 
 @Component({
   selector: 'app-topnav',
@@ -63,7 +63,7 @@ export class TopnavComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     if (this.authService.currentUserValue) {
-      this.displayName = this.authService.currentUserValue.name;
+      this.displayName = this.authService.currentUserValue.nombre;
     }
     this.subscription = this.sidebarService.getSidebar().subscribe(
       res => {

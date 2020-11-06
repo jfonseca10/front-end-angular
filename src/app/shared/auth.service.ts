@@ -1,25 +1,28 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http'
-import { AngularFireAuth } from '@angular/fire/auth';
-import { auth } from 'firebase/app';
-import { from } from 'rxjs';
-import { environment } from '../../environments/environment';
-import { map } from 'rxjs/operators';
-import { BehaviorSubject, Observable } from 'rxjs'
-import { Router } from '@angular/router'
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http'
+import {AngularFireAuth} from '@angular/fire/auth';
+import {auth} from 'firebase/app';
+import {from} from 'rxjs';
+import {environment} from '../../environments/environment';
+import {map} from 'rxjs/operators';
+import {BehaviorSubject, Observable} from 'rxjs'
+import {Router} from '@angular/router'
 
 const {apiUrl} = environment
 
 export interface ISignInCredentials {
-  rol: string;
+  email: string;
   password: string;
 }
 
 export interface ICreateCredentials {
+  apellidos: string;
+  cedula: string;
   email: string;
+  nombres: string;
   password: string;
-  name: string;
-  rol: string;
+  seudonimo: string;
+  telefono: string;
 }
 
 export interface EnvioCorreo {
@@ -27,11 +30,11 @@ export interface EnvioCorreo {
 }
 
 export interface UserModel {
-  id: string;
   email: string;
-  name: string;
-  rol: string;
+  idusuario: string;
+  nombre: string;
   token: string;
+  permissions: any;
 }
 
 export interface IPasswordReset {
@@ -71,14 +74,12 @@ export class AuthService {
   }
 
   register(credentials: ICreateCredentials) {
-
+    console.log('modelo', credentials)
     return this.http.post<any>(`${apiUrl}/user/create`, credentials).toPromise();
   }
 
   sendPasswordEmail(correoEnviado) {
-    console.log('llega el correo: ', correoEnviado);
     return this.http.post<any>(`${apiUrl}/user/verifyMail`, {email: correoEnviado}).toPromise();
-    // return from(this.afAuth.auth.sendPasswordResetEmail(email));
   }
 
   verifyCode(code) {
@@ -94,16 +95,9 @@ export class AuthService {
     return this.afAuth.auth.currentUser;
   }
 
-  getDatosEmpleado(rol)
-  {
+  getDatosEmpleado(rol) {
     console.log('ingreso a servcio', rol)
-    return this.http.get<any>(`${apiUrl}/user/getDatoEmpleado`,{params: {rol}}).toPromise();
+    return this.http.get<any>(`${apiUrl}/user/getDatoEmpleado`, {params: {rol}}).toPromise();
   }
-
-  // getNombreCompletoEmpleado(rol)
-  // {
-  //   console.log('ingreso a servcio', rol)
-  //   return this.http.get<any>(`${apiUrl}/user/getDatoEmpleado`,{params: {rol}}).toPromise();
-  // }
 
 }
